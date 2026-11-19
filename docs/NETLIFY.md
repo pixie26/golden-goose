@@ -1,4 +1,4 @@
-# 金鹅银行 V2.0.3：Netlify 上线指南
+# 金鹅银行 V2.1：Netlify 上线指南
 
 本项目由静态网页、两个 Netlify Functions 和持久化 PostgreSQL 组成。建议使用 **私人 GitHub 仓库 + Netlify + Supabase PostgreSQL**。正式包已经包含所需配置，没有要求你再改前端代码。
 
@@ -31,7 +31,7 @@ Supabase 官方将 transaction pooler 用于短连接的 serverless 场景。本
 ```bash
 git init
 git add .
-git commit -m "Release Golden Goose Bank v2.0.3"
+git commit -m "Release Golden Goose Bank v2.1"
 git branch -M main
 ```
 

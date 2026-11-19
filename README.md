@@ -2,9 +2,9 @@
 
 ![金鹅银行](public/assets/images/hero-fairytale.png)
 
-![version](https://img.shields.io/badge/version-2.0.3-ff69b4)
+![version](https://img.shields.io/badge/version-2.1-ff69b4)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A522.8-339933?logo=nodedotjs&logoColor=white)
-![tests](https://img.shields.io/badge/tests-298%20%E9%A1%B9%20%C2%B7%200%20%E5%A4%B1%E8%B4%A5-success)
+![tests](https://img.shields.io/badge/tests-322%20%E9%A1%B9%20%C2%B7%200%20%E5%A4%B1%E8%B4%A5-success)
 ![deploy](https://img.shields.io/badge/deploy-Netlify-00AD9F?logo=netlify&logoColor=white)
 
 一个自托管的**家庭银行与投资学习应用**。孩子在「金鹅银行」里领取任务奖励、存定期存款、申请购物、购买心愿，并用零花钱进行港美股碎股模拟投资；家长负责记账、审批和行情维护。所有账务、权限和余额校验都在服务端完成。
@@ -94,7 +94,7 @@ npm run dev
 npm run verify   # check + 全部测试
 ```
 
-V2.0.3 在 Node.js 24 上共 **298 项测试（296 通过、0 失败、2 项真实数据库测试跳过）**，另做 9,600 步非股票资金模拟，现金、预留、借款和流水对账全部通过。检查结果见 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。
+V2.1 的代码基线在 GitHub Actions 上运行 **322 项测试（320 通过、0 失败、2 项真实数据库测试跳过）**，另做 9,600 步非股票资金模拟，现金、预留、借款和流水对账全部通过。检查结果见 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。
 
 ## 文档
 

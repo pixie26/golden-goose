@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
+assert.match(pkg.version,/^\d+\.\d+$/,'Release version must be x.x (example: 2.1), never x.x.x');
 const lock=JSON.parse(await readFile(join(root,'package-lock.json'),'utf8'));
 assert.equal(lock.version,pkg.version,'package-lock version must match package.json');
 assert.equal(lock.packages[''].version,pkg.version,'lockfile root version must match');
@@ -55,5 +56,7 @@ for(const file of await walk('public')){
 }
 const html=await readFile(join(publicRoot,'index.html'),'utf8');
 assert.ok(html.includes(`?v=${pkg.version}`),'HTML cache version must match release');
+const manifest=JSON.parse(await readFile(join(publicRoot,'site.webmanifest'),'utf8'));
+assert.ok(manifest.icons.every(icon=>icon.src.endsWith(`?v=${pkg.version}`)),'Manifest icon version must match release');
 console.log(`金鹅银行 V${pkg.version}: ${checked} source files and ${assets.size} asset references checked.`);
 console.log('Ready: public/ + netlify/functions/ (database and setup token are configured in Netlify).');

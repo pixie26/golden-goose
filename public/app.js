@@ -1,4 +1,4 @@
-/* 皇家金鹅银行 Royal Bank of the Golden Goose — front-end V2.0.3
+/* 皇家金鹅银行 Royal Bank of the Golden Goose — front-end V2.1
    Plain ES2020, no build step. Runs as a module in the browser and as a classic script in tests. */
 const root=document.getElementById('root');
 const toastEl=document.getElementById('toast');
