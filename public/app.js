@@ -72,6 +72,21 @@ function friendlyDay(s){
 }
 const qtyText=micro=>(Number(micro||0)/1e6).toFixed(6).replace(/\.?0+$/,'');
 const priceText=milli=>(milli/1000).toLocaleString('en-HK',{minimumFractionDigits:1,maximumFractionDigits:1});
+const signedPct=n=>{const r=Math.round(n*10)/10;return (r<0?'−':r>0?'+':'')+Math.abs(r).toFixed(1)+'%';};
+// A holding's average buy price and latest close per share, in the quote currency (costs are
+// kept in O$; USD × usdToO), plus unrealised gain in O$ and as a share of cost.
+function positionFigures(p){
+ const security=data.symbols.find(s=>s.symbol===p.symbol)||{},currency=p.quote?.currency||security.currency||'';
+ const rate=currency==='USD'?(Number(data.settings?.usdToO)||8):1;
+ const gain=p.quote?p.valueCents-p.costCents:null;
+ return {currency,buyMilli:p.qtyMicro>0?Math.round(p.costCents*1e7/(p.qtyMicro*rate)):null,closeMilli:p.quote?.priceMilli??null,gain,gainPct:gain!==null&&p.costCents>0?gain/p.costCents*100:null};
+}
+const priceWithCurrency=(milli,currency)=>milli===null?'—':`${priceText(milli)} ${esc(currency)}`;
+function gainLines(f){
+ if(f.gain===null)return '<span class="muted">—</span>';
+ const tone=f.gain>=0?'pos':'neg';
+ return `<span class="num ${tone}">${signedMoney(f.gain)}</span>${f.gainPct===null?'':`<span class="num ${tone}">${signedPct(f.gainPct)}</span>`}`;
+}
 const quoteText=s=>s?.quote?.priceMilli?`${priceText(s.quote.priceMilli)} ${esc(s.quote.currency||s.currency||'')}`:'—';
 
 /* ---------- icons (24px line set) ---------- */
@@ -354,7 +369,7 @@ async function req(path,method='GET',body=null){
   }
   // Cookies are shared by tabs. Never install another account's snapshot into
   // the current account's page when another tab has just switched logins.
-  if(path==='/api/state'&&role&&d.role&&d.role!==role){sessionExpired();throw Error('登录账户已切换，请重新登录');}
+  if(path.startsWith('/api/state')&&role&&d.role&&d.role!==role){sessionExpired();throw Error('登录账户已切换，请重新登录');}
   return d;
  }catch(err){
   if(controller?.signal.aborted)throw Error(method==='GET'?'连接超时，请检查网络后重试。':'连接超时，尚未确认操作结果。请保留当前页面后重试，系统会避免重复提交。');
@@ -378,6 +393,9 @@ async function boot(){
  }
 }
 async function refresh(){const fresh=await req('/api/state');data=fresh;pendingStateRefresh=null;render();}
+// Background reads send the version the page holds; an unchanged state comes back as {unchanged:true}.
+const statePath=()=>data?.stateVersion?`/api/state?since=${encodeURIComponent(data.stateVersion)}`:'/api/state';
+function keepUnchangedState(){if(pendingStateRefresh){pendingStateRefresh=null;render();}}
 function stateRefreshNotice(){
  if(!pendingStateRefresh)return '';
  return `<section class="state-refresh-notice" role="status"><div><b>${esc(pendingStateRefresh.message)}</b><p>操作已完成，账户数据暂未刷新。请刷新查看最新余额。</p></div><button type="button" class="btn btn-soft" data-refresh-state>${icon('refresh')}刷新账户</button></section>`;
@@ -417,7 +435,11 @@ async function runAction(action,payload){
  if(r.quotesFetched!==undefined)msg=`取得 ${r.quotesFetched} 条日线并完成结算`+(r.errors?.length?`；${r.errors.length} 只暂时失败`:'');
  if(r.warning)msg+='；'+r.warning;
  pendingStateRefresh={message:msg,fingerprint};
- try{await refresh();toast(msg,!!r.warning||!!r.errors?.length);}
+ try{
+  // The action response carries the updated state, saving a second round trip; otherwise read it.
+  if(r.state&&r.state.role===role){data=r.state;pendingStateRefresh=null;render();}else await refresh();
+  toast(msg,!!r.warning||!!r.errors?.length);
+ }
  catch(err){
   if(role&&data){render();toast(msg+'；请点“刷新账户”查看最新结果');}
   else toast(msg+'；请重新登录查看账户');
@@ -596,7 +618,7 @@ function investmentSnapshot(){
  const pending=data.orders.filter(o=>o.status==='pending').length;
  const name=p=>data.symbols.find(s=>s.symbol===p.symbol)?.name||p.symbol;
  const stats=`<div class="mini-stats"><div><span>股票总市值</span><b class="num">${money(data.summary.stocksValueCents)}</b></div><div><span>未实现盈亏</span><b class="num ${pnl>=0?'pos':'neg'}">${signedMoney(pnl)}</b></div><div><span>持仓数量</span><b class="num">${holdings.length} 只</b></div><div><span>待结算订单</span><b class="num">${pending} 笔</b></div></div>`;
- const rows=holdings.length?`<div class="holdings">${holdings.slice(0,3).map(p=>`<div class="holding"><div class="holding-main"><b>${esc(p.symbol)}</b><span>${esc(name(p))}</span><small>${p.quote?`收盘价日期 ${esc(p.quote.date)}`:'暂缺收盘价 · 按成本估值'}</small></div><div class="holding-side"><b class="num">${money(p.valueCents)}</b>${p.quote?`<span class="num ${p.valueCents>=p.costCents?'pos':'neg'}">${signedMoney(p.valueCents-p.costCents)}</span>`:'<span class="muted">—</span>'}</div></div>`).join('')}</div>`:'<p class="hint invest-empty">还没有股票持仓</p>';
+ const rows=holdings.length?`<div class="holdings">${holdings.slice(0,3).map(p=>{const f=positionFigures(p);return `<div class="holding"><div class="holding-main"><b>${esc(p.symbol)}</b><span>${esc(name(p))}</span><small class="holding-prices">买入价 <b class="num">${priceWithCurrency(f.buyMilli,f.currency)}</b> · 收盘价 <b class="num">${priceWithCurrency(f.closeMilli,f.currency)}</b></small><small>${p.quote?`收盘价日期 ${esc(p.quote.date)}`:'暂缺收盘价 · 按成本估值'}</small></div><div class="holding-side"><b class="num">${money(p.valueCents)}</b>${gainLines(f)}</div></div>`;}).join('')}</div>`:'<p class="hint invest-empty">还没有股票持仓</p>';
  const warn=missing?`<p class="hint warn-text">${missing} 只持仓暂缺有效收盘价，按成本估值，不计入盈亏。</p>`:'';
  return card('我的投资速览','trend',stats+rows+warn,{right:more('stocks','查看投资'),cls:'invest'});
 }
@@ -662,7 +684,9 @@ function loanPanel(){
  const rows=recordsList('loans',data.loans,l=>{
   const interest=Math.round(l.interestMicroCents/1e6),due=l.principalCents+interest,active=l.status==='active';
   const info=active?meta(`本金 ${money(l.principalCents)}`,`利息 ${money(interest)}`,`年息 ${pct(l.aprBps)}`):meta(date(l.createdAt),`年息 ${pct(l.aprBps)}`);
-  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.1" step="0.1" max="${(owedCents(due)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
+  // Mirrors loan.repay: all free cash, no pending holds, short of the due by under O$0.1.
+  const free=data.summary.availableCents,settleAll=active&&due>free&&free>0&&!data.summary.reservedCents&&due-free<10;
+  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.1" step="0.1" max="${(owedCents(due)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>${settleAll?'<p class="hint loan-settle">可用余额比应还少不到 O$ 0.1：按应还金额还款或点「全部还清」，会用掉全部可用余额并结清，差额免还。</p>':''}`:'';
   return `<li class="row"><div class="row-main"><b>借款 <span class="num">${money(l.requestedCents)}</span></b><small>${info}</small></div><div class="row-side">${active?`<b class="num neg">${money(owedCents(due))}</b>`:''}${statusBadge('loan',l.status)}</div>${repay}</li>`;
  },{label:'我的借款',categories:recordStatusCategories('loan'),empty:'暂无借款'});
  const request=role!=='kid'?'<p class="hint">Olivia 可以登录自己的账户申请借款。</p>':spendableCents(available)>0?opForm('loan.request',field('amount','借多少 O$','number',`inputmode="decimal" required min="0.1" step="0.1" max="${(spendableCents(available)/100).toFixed(2)}" placeholder="0.0"`),'申请借钱'):`<p class="loan-limit-message">${limit===0?'家长已暂停新增借款。':'当前没有可申请的额度，还款或待处理申请被拒绝后会释放额度。'}</p>`;
@@ -730,9 +754,9 @@ function holdingsCard(holdings){
  const name=sym=>data.symbols.find(s=>s.symbol===sym)?.name||'';
  const reservedSell=sym=>data.orders.filter(o=>o.side==='sell'&&o.symbol===sym&&o.status==='pending').reduce((n,o)=>n+o.qtyMicro,0);
  const rows=recordsList('holdings',holdings,p=>{
-  const avail=Math.max(0,p.qtyMicro-reservedSell(p.symbol)),gain=p.valueCents-p.costCents;
+  const avail=Math.max(0,p.qtyMicro-reservedSell(p.symbol)),f=positionFigures(p);
   const sell=avail>0?`<details class="inline row-actions"><summary class="btn btn-sm btn-ghost">卖出</summary>${opForm('stock.sell',`${hiddenInput('symbol',p.symbol)}<label class="field"><span>卖出股数（可卖 ${qtyText(avail)}）</span><input name="qty" type="number" inputmode="decimal" required step="0.000001" min="0.000001" max="${avail/1e6}"></label><button type="button" class="btn btn-sm btn-soft" data-fill="${avail/1e6}">全部</button>`,'提交卖出单',{cls:'form-inline'})}</details>`:'';
-  return `<li class="row"><div class="row-main"><b>${esc(p.symbol)} <span class="muted">${esc(name(p.symbol))}</span></b><small>${meta(`${qtyText(p.qtyMicro)} 股`,`成本 ${money(p.costCents)}`,p.quote?'收盘 '+esc(p.quote.date):'暂缺收盘价')}</small></div><div class="row-side"><b class="num">${money(p.valueCents)}</b>${p.quote?`<span class="num ${gain>=0?'pos':'neg'}">${signedMoney(gain)}</span>`:''}</div>${sell}</li>`;
+  return `<li class="row"><div class="row-main"><b>${esc(p.symbol)} <span class="muted">${esc(name(p.symbol))}</span></b><small>${meta(`${qtyText(p.qtyMicro)} 股`,`成本 ${money(p.costCents)}`,`买入价 ${priceWithCurrency(f.buyMilli,f.currency)}`,p.quote?`收盘价 ${priceWithCurrency(f.closeMilli,f.currency)}（${esc(p.quote.date)}）`:'暂缺收盘价')}</small></div><div class="row-side"><b class="num">${money(p.valueCents)}</b>${f.gain===null?'':gainLines(f)}</div>${sell}</li>`;
  },{label:'我的持仓',categories:[['HK','港股'],['US','美股']],category:p=>data.symbols.find(s=>s.symbol===p.symbol)?.market,time:false,order:false,empty:'还没有股票持仓'});
  return card('我的持仓','briefcase',rows);
 }
@@ -912,8 +936,9 @@ async function refreshWhenIdle(){
  if(!idle())return;
  const startRole=role,startData=data,startTab=tab,startSub=sub[tab];
  try{
-  const fresh=await req('/api/state');
+  const fresh=await req(statePath());
   if(!idle()||role!==startRole||data!==startData||tab!==startTab||sub[tab]!==startSub)return;
+  if(fresh.unchanged)return keepUnchangedState();
   data=fresh;pendingStateRefresh=null;render();
  }catch{/* Keep the current page if the network is unavailable. */}
 }
@@ -1023,8 +1048,9 @@ if(typeof document.addEventListener==='function'){
   if(!idle())return;
   const startData=data,startRole=role;
   try{
-   const fresh=await req('/api/state');
+   const fresh=await req(statePath());
    if(!idle()||role!==startRole||data!==startData)return;
+   if(fresh.unchanged)return keepUnchangedState();
    // A task, interest rate, watchlist quote or order can change without changing
    // balances or notifications. Compare the full public view so every page updates.
    const changed=!!pendingStateRefresh||JSON.stringify(data)!==JSON.stringify(fresh);

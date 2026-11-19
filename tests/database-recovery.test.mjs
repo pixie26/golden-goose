@@ -85,7 +85,8 @@ test('a Client error during initialization is controlled and destroys its client
   const store=await bank();scenario.failInitialization=true;
   await assert.rejects(store.readStore(),error=>error.code==='BANK_STORE_UNAVAILABLE'&&error.cause?.code==='ECONNRESET');
   const failed=scenario.clients[0];
-  assert.equal(failed.destroyed,true);assert.equal(failed.releases,1);assert.equal(scenario.pools[0].ended,true);
+  // Startup checks out the client twice (ready check, then full initialization): each checkout is released exactly once.
+  assert.equal(failed.destroyed,true);assert.equal(failed.releases,failed.checkouts);assert.equal(failed.checkouts,2);assert.equal(scenario.pools[0].ended,true);
   assert.equal((await store.readStore()).cashCents,0);assert.equal(scenario.pools.length,2);
 });
 

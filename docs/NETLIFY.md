@@ -111,6 +111,12 @@ Yahoo 返回 403、429 或网络错误时，定存和借款仍需核对正常结
 
 Netlify 会在用量达到 50%、75%、100% 时以邮件和站内消息提醒；若不希望因额度用完而暂停，可考虑付费套餐。[Netlify credits 说明](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/) · [Netlify 价格](https://www.netlify.com/pricing/) · [Supabase 出站流量](https://supabase.com/docs/guides/platform/manage-your-usage/egress)
 
+### 速度：函数与数据库放在同一地区
+
+每个页面操作都要从香港到函数往返一次，函数再按顺序查询数据库数次，所以数据库应与函数在同一地区。2023 年 10 月 4 日以后新建的 Netlify 站点，函数默认在 Ohio（`cmh`，即 AWS `us-east-2`），Supabase 应选 **East US (Ohio)**。更早的站点请在 Netlify 后台核对函数地区。函数地区只能在 Pro / Enterprise 套餐中更改。
+
+API 自己用 Brotli / gzip 压缩 JSON。部署后可在浏览器开发者工具的 Network 中打开 `/api/state`，响应头应有 `content-encoding: br`（或 `gzip`）。
+
 ## 九、常见故障
 
 | 现象 | 优先检查 |
