@@ -48,6 +48,8 @@ async function actionFingerprintHash(fingerprint){
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Monetary displays always have one decimal; exact cents and editable values stay intact.
 const displayAmount=n=>{const cents=Number(n)||0,rounded=Math.round(Math.abs(cents)/10)/10;return rounded===0?0:Math.sign(cents)*rounded;};
+// Spendable cash is shown rounded down to O$0.1, so a shown amount can always be spent in full.
+const spendableCents=n=>Math.floor(Math.max(0,Number(n)||0)/10)*10;
 const money=n=>'O$ '+displayAmount(n).toLocaleString('en-HK',{minimumFractionDigits:1,maximumFractionDigits:1});
 const signedMoney=n=>{const shown=displayAmount(n);return (shown<0?'−':shown>0?'+':'')+money(Math.abs(n));};
 // Normalize currency fragments in old notification/ledger text for display only.
@@ -137,7 +139,7 @@ const moneyField=(name,label,rest='')=>field(name,label,'number',`inputmode="dec
 function spendingField(label){
  const available=Math.max(0,Number(data.summary.availableCents)||0);
  // These forms accept tenths: never round a spending cap upward past usable cash.
- const displayCap=Math.floor(available/10)*10;
+ const displayCap=spendableCents(available);
  return `${moneyField('amount',label,`required max="${(available/100).toFixed(2)}" data-budget-amount`)}<p class="budget-note"><span>本次最多</span><b class="num">${money(displayCap)}</b><small>已扣除待处理购物和股票买单的预留金额</small></p>`;
 }
 const textArea=(name,label,ph='可选')=>`<label class="field"><span>${label}</span><textarea name="${esc(name)}" maxlength="240" placeholder="${esc(ph)}"></textarea></label>`;
@@ -219,7 +221,7 @@ const empty=t=>`<div class="empty">${t}</div>`;
 const card=(title,ic,body,{right='',cls='',id=''}={})=>`<section class="card${cls?' '+cls:''}"${id?` id="${id}"`:''}><header class="card-h"><h3>${icon(ic)}<span>${title}</span></h3>${right}</header>${body}</section>`;
 const more=(t,label='全部',sb='')=>`<button type="button" class="more" data-tab="${t}"${sb?` data-go-sub="${sb}"`:''}>${label}${icon('chevRight')}</button>`;
 const stat=(label,value,cls='')=>`<div class="stat"><span>${label}</span><b class="num${cls?' '+cls:''}">${value}</b></div>`;
-const pageHead=(title,ic,right)=>`<div class="pagehead"><h1>${icon(ic)}<span>${title}</span></h1>${right??`<div class="pill">可用 <b class="num">${money(data.summary.availableCents)}</b></div>`}</div>`;
+const pageHead=(title,ic,right)=>`<div class="pagehead"><h1>${icon(ic)}<span>${title}</span></h1>${right??`<div class="pill">可用 <b class="num">${money(spendableCents(data.summary.availableCents))}</b></div>`}</div>`;
 const seg=(group,items)=>`<div class="seg" role="tablist">${items.map(([k,l])=>`<button type="button" role="tab" data-seg="${group}" data-sub="${k}" class="${sub[group]===k?'active':''}" aria-selected="${sub[group]===k}">${l}</button>`).join('')}</div>`;
 const hid=(g,k)=>sub[g]===k?'':' hidden';
 const list=rows=>`<ul class="list">${rows}</ul>`;
@@ -535,7 +537,7 @@ function home(){
 const sparkle=cls=>`<svg class="spark ${cls}" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0Q10 10 20 10Q10 10 10 20Q10 10 0 10Q10 10 10 0Z"/></svg>`;
 function heroBanner(){
  const s=data.summary;
- return `<section class="hero" aria-label="账户总览"><div class="scene" aria-hidden="true"></div><div class="hero-inner"><div class="hero-goose"><img src="/assets/images/goose.svg" alt="戴皇冠的金鹅">${sparkle('s1')}${sparkle('s2')}</div><div class="hero-card"><button type="button" class="hero-account-link" data-tab="account" aria-label="${role==='dad'?'查看 Olivia 的账户':'查看我的账户'}" title="进入我的账户"></button><div class="hero-title">${art('crown')}<span>${role==='dad'?'Olivia 的金鹅账户':'我的金鹅账户'}</span><button type="button" class="eye" data-eye aria-pressed="${hideBalance}" aria-label="${hideBalance?'显示金额':'隐藏金额'}">${icon(hideBalance?'eyeOff':'eye')}</button></div><div class="hero-amount num">${hideBalance?'O$ ••••••':money(s.netWorthCents)}</div><div class="hero-sub">净资产 · 可用 <b class="num">${hideBalance?'••••':money(s.availableCents)}</b></div></div><div class="hero-coin"><img src="/assets/images/coin.svg" alt="">${sparkle('s3')}${sparkle('s4')}</div></div></section>`;
+ return `<section class="hero" aria-label="账户总览"><div class="scene" aria-hidden="true"></div><div class="hero-inner"><div class="hero-goose"><img src="/assets/images/goose.svg" alt="戴皇冠的金鹅">${sparkle('s1')}${sparkle('s2')}</div><div class="hero-card"><button type="button" class="hero-account-link" data-tab="account" aria-label="${role==='dad'?'查看 Olivia 的账户':'查看我的账户'}" title="进入我的账户"></button><div class="hero-title">${art('crown')}<span>${role==='dad'?'Olivia 的金鹅账户':'我的金鹅账户'}</span><button type="button" class="eye" data-eye aria-pressed="${hideBalance}" aria-label="${hideBalance?'显示金额':'隐藏金额'}">${icon(hideBalance?'eyeOff':'eye')}</button></div><div class="hero-amount num">${hideBalance?'O$ ••••••':money(s.netWorthCents)}</div><div class="hero-sub">净资产 · 可用 <b class="num">${hideBalance?'••••':money(spendableCents(s.availableCents))}</b></div></div><div class="hero-coin"><img src="/assets/images/coin.svg" alt="">${sparkle('s3')}${sparkle('s4')}</div></div></section>`;
 }
 const quick=(tone,a,title,subtitle,t,sb)=>`<button type="button" class="qa qa-${tone}" data-tab="${t}"${sb?` data-go-sub="${sb}"`:''}>${art(a)}<span class="qa-text"><b>${title}</b><small>${subtitle}</small></span>${icon('chevRight','chev')}</button>`;
 function assetsCard(){
@@ -543,7 +545,7 @@ function assetsCard(){
  const parts=[['活期账户',s.cashCents,'var(--c-cash)'],['定期存款',s.fixedPrincipalCents,'var(--c-fixed)'],['股票投资',s.stocksValueCents,'var(--c-stock)']];
  let acc=0;
  const stops=total>0?parts.map(([,v,c])=>{const a=acc;acc+=Math.max(0,v);return `${c} ${(a/total*100).toFixed(2)}% ${(acc/total*100).toFixed(2)}%`;}).join(','):'var(--c-empty) 0% 100%';
- return card('我的资产','layers',`<div class="assets"><div class="donut" style="background:conic-gradient(${stops})"><div class="donut-hole"><small>总资产</small><b class="num">${money(total)}</b></div></div><ul class="legend">${parts.map(([l,v,c])=>`<li><span><i style="background:${c}"></i>${l}</span><b class="num">${money(v)}</b></li>`).join('')}${debt?`<li><span><i class="ring"></i>欠家长</span><b class="num neg">−${money(debt)}</b></li>`:''}<li class="legend-total"><span>现在可用</span><b class="num pinktext">${money(s.availableCents)}</b></li></ul></div>`,{right:more('account'),cls:'assets-card'});
+ return card('我的资产','layers',`<div class="assets"><div class="donut" style="background:conic-gradient(${stops})"><div class="donut-hole"><small>总资产</small><b class="num">${money(total)}</b></div></div><ul class="legend">${parts.map(([l,v,c])=>`<li><span><i style="background:${c}"></i>${l}</span><b class="num">${money(v)}</b></li>`).join('')}${debt?`<li><span><i class="ring"></i>欠家长</span><b class="num neg">−${money(debt)}</b></li>`:''}<li class="legend-total"><span>现在可用</span><b class="num pinktext">${money(spendableCents(s.availableCents))}</b></li></ul></div>`,{right:more('account'),cls:'assets-card'});
 }
 function wishState(w){
  const linked=(data.purchaseRequests||[]).filter(r=>r.wishId===w.id);
@@ -658,11 +660,11 @@ function loanPanel(){
  const rows=recordsList('loans',data.loans,l=>{
   const interest=Math.round(l.interestMicroCents/1e6),due=l.principalCents+interest,active=l.status==='active';
   const info=active?meta(`本金 ${money(l.principalCents)}`,`利息 ${money(interest)}`,`年息 ${pct(l.aprBps)}`):meta(date(l.createdAt),`年息 ${pct(l.aprBps)}`);
-  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.01" step="0.01" max="${(due/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
+  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.01" step="0.01" max="${(Math.max(due,Math.round(due/10)*10)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
   return `<li class="row"><div class="row-main"><b>借款 <span class="num">${money(l.requestedCents)}</span></b><small>${info}</small></div><div class="row-side">${active?`<b class="num neg">${money(due)}</b>`:''}${statusBadge('loan',l.status)}</div>${repay}</li>`;
  },{label:'我的借款',categories:recordStatusCategories('loan'),empty:'暂无借款'});
  const request=role!=='kid'?'<p class="hint">Olivia 可以登录自己的账户申请借款。</p>':available>0?opForm('loan.request',field('amount','借多少 O$','number',`inputmode="decimal" required min="0.01" step="0.01" max="${(available/100).toFixed(2)}" placeholder="0.0"`),'申请借钱'):`<p class="loan-limit-message">${limit===0?'家长已暂停新增借款。':'当前没有可申请的额度，还款或待处理申请被拒绝后会释放额度。'}</p>`;
- return `<div class="cols">${card('向家长借钱','coins',`<p class="hint lead">借款总额度 ${money(limit)} · 年息 ${pct(data.settings.loanAprBps)} · 按天计息 · 需家长批准</p><div class="budget-note"><span>本次最多可申请</span><b class="num">${money(Math.floor(available/10)*10)}</b><small>未还本金 ${money(data.summary.loanPrincipalCents)} · 待批申请 ${money(pending)}</small></div>${request}`)}${card('我的借款','list',rows)}</div>`;
+ return `<div class="cols">${card('向家长借钱','coins',`<p class="hint lead">借款总额度 ${money(limit)} · 年息 ${pct(data.settings.loanAprBps)} · 按天计息 · 需家长批准</p><div class="budget-note"><span>本次最多可申请</span><b class="num">${money(spendableCents(available))}</b><small>未还本金 ${money(data.summary.loanPrincipalCents)} · 待批申请 ${money(pending)}</small></div>${request}`)}${card('我的借款','list',rows)}</div>`;
 }
 
 /* ---------- 投资 ---------- */

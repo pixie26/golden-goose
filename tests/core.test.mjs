@@ -181,7 +181,6 @@ test('V1.7: a HK order cannot fill from a delayed pre-auction price inside the s
 test('V1.7: loan "pay off all" settles the exact cent amount after accrual',()=>{
  const s=init();grant(s,'1000');act(s,'loan.request',{amount:'100'});act(s,'loan.approve',{id:s.loans[0].id},'dad');
  const l=s.loans[0];l.interestMicroCents=347_400_000; // O$3.474 accrued: UI shows O$3.5
- assert.throws(()=>act(s,'loan.repay',{id:l.id,amount:'103.50'}),/超过/);
  act(s,'loan.repay',{id:l.id,all:true});
  assert.equal(l.status,'repaid');assert.equal(l.principalCents,0);assert.equal(s.cashCents,100000+10000-10347);
  assert.throws(()=>act(s,'loan.repay',{id:l.id,all:true}),/未找到/);
