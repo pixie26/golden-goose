@@ -117,7 +117,7 @@ test('outstanding principal plus pending loan requests reserve the configurable 
   const s=bank();act(s,'loan.request',{amount:'200'});const first=s.loans[0];
   act(s,'loan.approve',{id:first.id},'dad');act(s,'loan.request',{amount:'300'});const second=s.loans[0];
   let d=derived(s);assert.equal(d.loanPrincipalCents,20000);assert.equal(d.loanPendingCents,30000);assert.equal(d.loanAvailableCents,0);
-  assert.throws(()=>act(s,'loan.request',{amount:'0.01'}),/500/);
+  assert.throws(()=>act(s,'loan.request',{amount:'0.1'}),/500/);
   act(s,'loan.approve',{id:second.id},'dad');d=derived(s);
   assert.equal(d.loanPrincipalCents,50000);assert.equal(d.loanPendingCents,0);assert.equal(d.loanAvailableCents,0);
   assert.equal(s.cashCents,50000);

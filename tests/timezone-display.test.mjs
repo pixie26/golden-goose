@@ -125,9 +125,10 @@ test('the loan form never states a larger remaining allowance than the server ac
  s.loans=[{id:'L1',principalCents:12345,requestedCents:20000,interestMicroCents:0,aprBps:0,status:'active',createdAt:'2026-11-01T00:00:00Z',lastAccruedDay:'2026-11-18'}];
  const html=(await mount(s)).run('loanPanel()'); // exact remaining allowance: O$376.55
  assert.match(html,/本次最多可申请<\/span><b class="num">O\$ 376\.5<\/b>/);
- assert.match(html,/name="amount"[^>]*max="376\.55"/,'the exact cent limit stays usable');
+ assert.match(html,/name="amount"[^>]*step="0\.1" max="376\.50"/,'loans are borrowed in O$0.1 units');
  assert.throws(()=>act(s,'loan.request',{amount:'376.6'}),/目前还可申请 O\$ 376\.5(?!\d)/);
- act(s,'loan.request',{amount:'376.55'});assert.equal(s.loans[0].requestedCents,37655);
+ assert.throws(()=>act(s,'loan.request',{amount:'376.55'}),/借款金额以 O\$ 0\.1 为单位/);
+ act(s,'loan.request',{amount:'376.5'});assert.equal(s.loans[0].requestedCents,37650);
 });
 
 test('the task price editor uses the same O$0.1 step that the server enforces',async()=>{

@@ -56,7 +56,7 @@ test('loan repayment also respects shopping reservations',()=>{
   const s=bank();
   act(s,'loan.request',{amount:'100'});act(s,'loan.approve',{id:s.loans[0].id},'dad');
   act(s,'purchase.request',{name:'书',amount:'90'});
-  unchangedOnError(s,'loan.repay',{id:s.loans[0].id,amount:'10.01'},/可用余额不足/);
+  unchangedOnError(s,'loan.repay',{id:s.loans[0].id,amount:'10.1'},/可用余额不足/);
   act(s,'loan.repay',{id:s.loans[0].id,amount:'10'});
   assert.equal(s.cashCents,9000);assert.equal(derived(s).availableCents,0);
 });

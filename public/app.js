@@ -50,6 +50,8 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const displayAmount=n=>{const cents=Number(n)||0,rounded=Math.round(Math.abs(cents)/10)/10;return rounded===0?0:Math.sign(cents)*rounded;};
 // Spendable cash is shown rounded down to O$0.1, so a shown amount can always be spent in full.
 const spendableCents=n=>Math.floor(Math.max(0,Number(n)||0)/10)*10;
+// Debts are shown rounded up to O$0.1, so paying the shown amount always settles (the server charges the exact due).
+const owedCents=n=>Math.ceil(Math.max(0,Number(n)||0)/10)*10;
 const money=n=>'O$ '+displayAmount(n).toLocaleString('en-HK',{minimumFractionDigits:1,maximumFractionDigits:1});
 const signedMoney=n=>{const shown=displayAmount(n);return (shown<0?'−':shown>0?'+':'')+money(Math.abs(n));};
 // Normalize currency fragments in old notification/ledger text for display only.
@@ -545,7 +547,7 @@ function assetsCard(){
  const parts=[['活期账户',s.cashCents,'var(--c-cash)'],['定期存款',s.fixedPrincipalCents,'var(--c-fixed)'],['股票投资',s.stocksValueCents,'var(--c-stock)']];
  let acc=0;
  const stops=total>0?parts.map(([,v,c])=>{const a=acc;acc+=Math.max(0,v);return `${c} ${(a/total*100).toFixed(2)}% ${(acc/total*100).toFixed(2)}%`;}).join(','):'var(--c-empty) 0% 100%';
- return card('我的资产','layers',`<div class="assets"><div class="donut" style="background:conic-gradient(${stops})"><div class="donut-hole"><small>总资产</small><b class="num">${money(total)}</b></div></div><ul class="legend">${parts.map(([l,v,c])=>`<li><span><i style="background:${c}"></i>${l}</span><b class="num">${money(v)}</b></li>`).join('')}${debt?`<li><span><i class="ring"></i>欠家长</span><b class="num neg">−${money(debt)}</b></li>`:''}<li class="legend-total"><span>现在可用</span><b class="num pinktext">${money(spendableCents(s.availableCents))}</b></li></ul></div>`,{right:more('account'),cls:'assets-card'});
+ return card('我的资产','layers',`<div class="assets"><div class="donut" style="background:conic-gradient(${stops})"><div class="donut-hole"><small>总资产</small><b class="num">${money(total)}</b></div></div><ul class="legend">${parts.map(([l,v,c])=>`<li><span><i style="background:${c}"></i>${l}</span><b class="num">${money(v)}</b></li>`).join('')}${debt?`<li><span><i class="ring"></i>欠家长</span><b class="num neg">−${money(owedCents(debt))}</b></li>`:''}<li class="legend-total"><span>现在可用</span><b class="num pinktext">${money(spendableCents(s.availableCents))}</b></li></ul></div>`,{right:more('account'),cls:'assets-card'});
 }
 function wishState(w){
  const linked=(data.purchaseRequests||[]).filter(r=>r.wishId===w.id);
@@ -660,10 +662,10 @@ function loanPanel(){
  const rows=recordsList('loans',data.loans,l=>{
   const interest=Math.round(l.interestMicroCents/1e6),due=l.principalCents+interest,active=l.status==='active';
   const info=active?meta(`本金 ${money(l.principalCents)}`,`利息 ${money(interest)}`,`年息 ${pct(l.aprBps)}`):meta(date(l.createdAt),`年息 ${pct(l.aprBps)}`);
-  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.01" step="0.01" max="${(Math.max(due,Math.round(due/10)*10)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
-  return `<li class="row"><div class="row-main"><b>借款 <span class="num">${money(l.requestedCents)}</span></b><small>${info}</small></div><div class="row-side">${active?`<b class="num neg">${money(due)}</b>`:''}${statusBadge('loan',l.status)}</div>${repay}</li>`;
+  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.1" step="0.1" max="${(owedCents(due)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
+  return `<li class="row"><div class="row-main"><b>借款 <span class="num">${money(l.requestedCents)}</span></b><small>${info}</small></div><div class="row-side">${active?`<b class="num neg">${money(owedCents(due))}</b>`:''}${statusBadge('loan',l.status)}</div>${repay}</li>`;
  },{label:'我的借款',categories:recordStatusCategories('loan'),empty:'暂无借款'});
- const request=role!=='kid'?'<p class="hint">Olivia 可以登录自己的账户申请借款。</p>':available>0?opForm('loan.request',field('amount','借多少 O$','number',`inputmode="decimal" required min="0.01" step="0.01" max="${(available/100).toFixed(2)}" placeholder="0.0"`),'申请借钱'):`<p class="loan-limit-message">${limit===0?'家长已暂停新增借款。':'当前没有可申请的额度，还款或待处理申请被拒绝后会释放额度。'}</p>`;
+ const request=role!=='kid'?'<p class="hint">Olivia 可以登录自己的账户申请借款。</p>':spendableCents(available)>0?opForm('loan.request',field('amount','借多少 O$','number',`inputmode="decimal" required min="0.1" step="0.1" max="${(spendableCents(available)/100).toFixed(2)}" placeholder="0.0"`),'申请借钱'):`<p class="loan-limit-message">${limit===0?'家长已暂停新增借款。':'当前没有可申请的额度，还款或待处理申请被拒绝后会释放额度。'}</p>`;
  return `<div class="cols">${card('向家长借钱','coins',`<p class="hint lead">借款总额度 ${money(limit)} · 年息 ${pct(data.settings.loanAprBps)} · 按天计息 · 需家长批准</p><div class="budget-note"><span>本次最多可申请</span><b class="num">${money(spendableCents(available))}</b><small>未还本金 ${money(data.summary.loanPrincipalCents)} · 待批申请 ${money(pending)}</small></div>${request}`)}${card('我的借款','list',rows)}</div>`;
 }
 
