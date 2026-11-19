@@ -1,0 +1,51 @@
+{
+  "version": "1.0.3",
+  "postgresql": "18.6",
+  "passed": 9,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "require connects with private-CA certificate and actually uses TLS",
+      "status": "passed"
+    },
+    {
+      "name": "verify-full + correct CA validates certificate and hostname",
+      "status": "passed"
+    },
+    {
+      "name": "literal backslash-n CA environment value validates",
+      "status": "passed"
+    },
+    {
+      "name": "wrong CA is rejected",
+      "status": "passed",
+      "errorCode": "DEPTH_ZERO_SELF_SIGNED_CERT"
+    },
+    {
+      "name": "wrong hostname is rejected with correct CA",
+      "status": "passed",
+      "errorCode": "ERR_TLS_CERT_ALTNAME_INVALID"
+    },
+    {
+      "name": "verify-ca validates CA but deliberately does not check hostname",
+      "status": "passed"
+    },
+    {
+      "name": "real store setup and financial write use verified TLS",
+      "status": "passed"
+    },
+    {
+      "name": "write lock times out at four seconds, rolls back, and same-key retry recovers",
+      "status": "passed",
+      "elapsedMs": 4009
+    },
+    {
+      "name": "checked-in TEST_DATABASE_URL integration test passes with verified TLS and no skipped tests",
+      "status": "passed"
+    }
+  ],
+  "limits": [
+    "Loopback PostgreSQL with self-signed private CA; not a real Supabase or Supavisor connection.",
+    "No public Netlify deployment or scheduled execution was performed."
+  ]
+}

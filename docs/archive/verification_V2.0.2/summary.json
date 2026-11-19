@@ -1,0 +1,125 @@
+{
+  "version": "2.0.2",
+  "date": "2026-11-19",
+  "timezone": "Asia/Hong_Kong",
+  "input": "royal-golden-goose-v2.0.1.zip",
+  "inputSha256": "31cf2a813e1facb710538c8a4c6e313e3e322091b5441bec96bca9f010bbb671",
+  "rule": "every order fills at the first close after it was placed; a session without a close for the stock rolls to the first later close once one exists",
+  "verification": {
+    "node": [
+      "22.8.0",
+      "22.23.5",
+      "24.22.3"
+    ],
+    "tests": 277,
+    "pass": 277,
+    "fail": 0,
+    "skipped": 0,
+    "postgresql": "16.15 direct + PgBouncer transaction pool",
+    "log": "verification.txt"
+  },
+  "newRegression": {
+    "added": 11,
+    "rewrittenForNewRule": 10,
+    "file": "tests/release-2.0.2.test.mjs (+2 in tests/settlement-order.test.mjs)"
+  },
+  "calendarCrossCheck": {
+    "reference": "pandas_market_calendars 5.6.1, holidays 0.109, lunardate 0.3",
+    "nyse": "2026-2099 identical (700 closures + 29 official, 154 + 5 early closes)",
+    "hkexHalfDays": "2026-2050 identical; 2051-2099 Lunar New Year eves from a table cross-checked against two lunisolar libraries",
+    "hkexFullDays2028On": "not built in by design; no invented closures",
+    "file": "calendar-crosscheck.txt"
+  },
+  "fuzz": {
+    "runs": 100,
+    "stepsPerRun": 1500,
+    "failed": 0,
+    "autoRolls": 2030,
+    "v2_0_1StuckOrdersSameModel": "92-162 per run vs 0",
+    "file": "fuzz-result.json"
+  },
+  "dateSweep": {
+    "instants": 9,
+    "failed": 0,
+    "file": "date-sweep-result.json"
+  },
+  "browserE2E": {
+    "browser": "Chrome headless via Playwright 1.63",
+    "devices": [
+      "desktop",
+      "iPhone SE",
+      "iPhone 13",
+      "iPad Mini"
+    ],
+    "result": "passed",
+    "file": "browser-e2e-result.json"
+  },
+  "productionDependencyVulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "bundling": {
+    "tool": "@netlify/zip-it-and-ship-it",
+    "version": "16.6.0",
+    "functions": [
+      {
+        "name": "bank",
+        "runtimeVersion": "nodejs24.x",
+        "routes": [
+          {
+            "pattern": "/api/*"
+          }
+        ]
+      },
+      {
+        "name": "daily-settlement",
+        "runtimeVersion": "nodejs24.x",
+        "schedule": "30 9,22 * * *"
+      }
+    ],
+    "invocationAgainstPostgreSQL16": {
+      "bootstrap": "uninitialized",
+      "setup": 200,
+      "cashGrant": "ok",
+      "stateCalendarCoverageField": "absent",
+      "scheduledFunction": "200; Yahoo unreachable from this sandbox (ENOTFOUND), reported per symbol without failing the run"
+    },
+    "note": "Local official bundling and invocation of the packaged functions; no production deployment."
+  },
+  "changes": [
+    "RGG-014 automatic roll to the first later close",
+    "RGG-015 NYSE rules + HKEX half-day rules; no yearly calendar update; 90-day notice removed",
+    "RGG-016 parent cancel of a stuck order (order.cancel)",
+    "RGG-017 no warning on a normal wait; legacy wording cleared",
+    "RGG-018 quote.batch settles once after the whole batch",
+    "one Intl formatter per exchange"
+  ],
+  "unverified": [
+    "Live Netlify environment, Supabase and scheduled triggers",
+    "Yahoo from this sandbox (unreachable; deterministic stand-in used)",
+    "Actual iPhone Safari"
+  ],
+  "productionSourceSha256": {
+    "package.json": "209a0e5b629fb1dbc387c00c8f0b4e5f8c0b373acd227321e6144e3f767e784d",
+    "package-lock.json": "46511230b3b2307b449cd516311c8d50dcbcb540460b1b765ac596f55a35432d",
+    "netlify.toml": "30b872fb4d157b388f013fb716bd58ae38c86e38400d9a9f97da852f8951f026",
+    "server.mjs": "6d03ed64abee7751c8390f35e9017ddbbfe105e1f9d337595aeeedbefceddd3f",
+    "scripts/check.mjs": "fc50c3a479b5a8ae77ed7fafea69408b08a42f8fdddedb9b97abd249b4c403c9",
+    "public/app.js": "b73dab35207a891ef0b6d43156ebc46db2f417a0daa34aeb79c656e68e5cb537",
+    "public/index.html": "575b1de249c7fe04d017f0296675eb7a53f48bc3b68693dd9b21bcc3a006c471",
+    "public/style.css": "379f7de738008de8dd3cb0ef92704f317f8abb1e7399bc85d20692302fd85392",
+    "public/site.webmanifest": "ae777e83022d61ba5581c4e18e2d07bb5b64dec0a253d4d18147dd39370290c1",
+    "lib/api.mjs": "113e8f889d967e1e92a300464ca06e140fdd8f56ee0c42bdd125ef3bc6b528ec",
+    "lib/core.mjs": "42828e9dba21a4a9edf28808ae467f35373ede3e9ff8c6fe76860fd76bd48f1f",
+    "lib/local-search.mjs": "84491a35d9d28a1d00e93db8745f7a3393bc51133859f426abcc84854258c1f5",
+    "lib/market.mjs": "9f92b606c7bf1832a5a8d7a194de17b89fd543d6cefa4b925e93244082c9170e",
+    "lib/quotes.mjs": "194d91a20604bf5daa8bf24fb6917a803907ef74811d8f247ad3c5aec0d73cb8",
+    "lib/store.mjs": "7fe6e9eb654265e34cbc4a60da52209256e73a500cb40860c820b6cbbfc9bea6",
+    "netlify/functions/bank.mjs": "0ac1eeb988f6e1307e9a98774b9693b58ec2229dd43202b2e1c5152e08c5bc17",
+    "netlify/functions/daily-settlement.mjs": "9f512e59f28b8d7bf8539f824f131b50337d124a60959ffa5becae5fd2e1b0fb"
+  }
+}

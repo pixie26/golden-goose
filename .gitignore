@@ -1,0 +1,13 @@
+node_modules/
+data/
+backups/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.netlify/
+coverage/
+test-results/
+*.log
+*.tmp-*

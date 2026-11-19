@@ -1,0 +1,88 @@
+{
+  "version": "2.0.1",
+  "date": "2026-11-19",
+  "timezone": "Asia/Hong_Kong",
+  "input": "royal-golden-goose-v2.0.0.zip",
+  "inputSha256": "ac7224d82760870ef0afc44725b04c1279c01d7cd8622590573848b0148dce5d",
+  "node": "24.22.1",
+  "verification": {
+    "tests": 266,
+    "pass": 264,
+    "fail": 0,
+    "skipped": 2,
+    "cancelled": 0
+  },
+  "newRegression": {
+    "tests": 8,
+    "originalPass": 1,
+    "originalFail": 7,
+    "fixedPass": 8,
+    "fixedFail": 0
+  },
+  "productionDependencyVulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "bundling": {
+    "tool": "@netlify/zip-it-and-ship-it",
+    "version": "16.6.0",
+    "functions": 2,
+    "runtime": "nodejs24.x",
+    "route": "/api/*",
+    "schedule": "30 9,22 * * *",
+    "moduleLoadAndMissingConfigGuard": "passed",
+    "cloudDeployment": false
+  },
+  "liveYahoo": {
+    "0700.HK": {
+      "parsedRows": 492,
+      "lastReturnedDate": "2026-11-17",
+      "elapsedMs": 2493
+    },
+    "AAPL": {
+      "initial4sAttempt": "timeout",
+      "retryParsedRows": 501,
+      "lastReturnedDate": "2026-11-17",
+      "retryElapsedMs": 4578
+    },
+    "note": "From audit environment only; does not establish Netlify egress or latest-date availability."
+  },
+  "fixes": [
+    "RGG-012 canonical-symbol mismatch",
+    "RGG-013 quote symbol/currency/market identity checks"
+  ],
+  "organization": [
+    "UTF-8 ZIP launcher names and Mac executable mode",
+    "2.0.1 version/cache metadata",
+    "separate historical 2.0.0 evidence",
+    "correct Netlify limits and YTD date wording"
+  ],
+  "unverified": [
+    "Real PostgreSQL/Supabase and transaction pooler in this run",
+    "Live Netlify environment and scheduled triggers",
+    "Real browser UI: Chromium socket permission failure; no actual Safari"
+  ],
+  "productionSourceSha256": {
+    "package.json": "46a679e98ee9f9646b859e8b718f567dd6da9e3fb53b0536ddd430e8663b5db8",
+    "package-lock.json": "235c7f169ad1c2387bec4a8c53c22be68ac832f2c0fbda67eb44cd4be32334fa",
+    "netlify.toml": "30b872fb4d157b388f013fb716bd58ae38c86e38400d9a9f97da852f8951f026",
+    "server.mjs": "6d03ed64abee7751c8390f35e9017ddbbfe105e1f9d337595aeeedbefceddd3f",
+    "scripts/check.mjs": "fc50c3a479b5a8ae77ed7fafea69408b08a42f8fdddedb9b97abd249b4c403c9",
+    "public/app.js": "feb69c781ca1f595f9fee18c6f717d130432a9813eeb4789a3e309c6e3e92cfa",
+    "public/index.html": "9dacbe25a888ffb3a962f690842d8d0fa024c8093a75fe45b4c7afe706c2642c",
+    "public/style.css": "d23104e58ea779449276d3ba337423bfdb9bf294ec383ffc0d6e082eb8cd49dc",
+    "public/site.webmanifest": "fa59d4cbb5211d210e01fe89d686ec2129b49231b2a2aa4570cce2976b8f03f5",
+    "lib/api.mjs": "113e8f889d967e1e92a300464ca06e140fdd8f56ee0c42bdd125ef3bc6b528ec",
+    "lib/core.mjs": "06d5e1995327560cb43e3b4a8280ec486e11ea4d89e7d6a3bdfa7c6d43f0ef4b",
+    "lib/local-search.mjs": "84491a35d9d28a1d00e93db8745f7a3393bc51133859f426abcc84854258c1f5",
+    "lib/market.mjs": "0968c2e1160deea7fe4196cefff3de5ed86654dcdece511975e96a233764add7",
+    "lib/quotes.mjs": "194d91a20604bf5daa8bf24fb6917a803907ef74811d8f247ad3c5aec0d73cb8",
+    "lib/store.mjs": "7fe6e9eb654265e34cbc4a60da52209256e73a500cb40860c820b6cbbfc9bea6",
+    "netlify/functions/bank.mjs": "0ac1eeb988f6e1307e9a98774b9693b58ec2229dd43202b2e1c5152e08c5bc17",
+    "netlify/functions/daily-settlement.mjs": "9f512e59f28b8d7bf8539f824f131b50337d124a60959ffa5becae5fd2e1b0fb"
+  }
+}

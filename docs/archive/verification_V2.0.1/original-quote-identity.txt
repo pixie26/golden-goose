@@ -1,0 +1,128 @@
+✖ watch.add: an old ticker redirected to META is rejected without changing the ledger (258.889076ms)
+✖ watch.add: an explicit NVDA-to-MSFT identity mismatch cannot fall back to the curated NVDA entry (114.484429ms)
+✖ security.register: an old ticker redirected to META is rejected without changing the ledger (96.129643ms)
+✖ security.register: an explicit NVDA-to-MSFT identity mismatch cannot fall back to the curated NVDA entry (87.385234ms)
+✔ an exact META request saves the security and its own confirmed closing price (96.699499ms)
+✖ manual refresh rejects mismatching symbol metadata and leaves the AAPL order unfilled (199.352582ms)
+✖ manual refresh rejects mismatching currency metadata and leaves the AAPL order unfilled (235.580931ms)
+✖ manual refresh rejects mismatching exchange time zone metadata and leaves the AAPL order unfilled (271.537932ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 1
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1621.692843
+
+✖ failing tests:
+
+test at tests/audit-quote-identity.test.mjs:70:3
+✖ watch.add: an old ticker redirected to META is rejected without changing the ledger (258.889076ms)
+  AssertionError [ERR_ASSERTION]: a canonical ticker change must not be reported as success
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:74:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/audit-quote-identity.test.mjs:80:3
+✖ watch.add: an explicit NVDA-to-MSFT identity mismatch cannot fall back to the curated NVDA entry (114.484429ms)
+  AssertionError [ERR_ASSERTION]: an explicit provider identity conflict is not an offline-network failure
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:84:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/audit-quote-identity.test.mjs:70:3
+✖ security.register: an old ticker redirected to META is rejected without changing the ledger (96.129643ms)
+  AssertionError [ERR_ASSERTION]: a canonical ticker change must not be reported as success
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:74:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/audit-quote-identity.test.mjs:80:3
+✖ security.register: an explicit NVDA-to-MSFT identity mismatch cannot fall back to the curated NVDA entry (87.385234ms)
+  AssertionError [ERR_ASSERTION]: an explicit provider identity conflict is not an offline-network failure
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:84:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/audit-quote-identity.test.mjs:108:3
+✖ manual refresh rejects mismatching symbol metadata and leaves the AAPL order unfilled (199.352582ms)
+  AssertionError [ERR_ASSERTION]: the rejected quote is reported to the parent
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:116:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/audit-quote-identity.test.mjs:108:3
+✖ manual refresh rejects mismatching currency metadata and leaves the AAPL order unfilled (235.580931ms)
+  AssertionError [ERR_ASSERTION]: the rejected quote is reported to the parent
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:116:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/audit-quote-identity.test.mjs:108:3
+✖ manual refresh rejects mismatching exchange time zone metadata and leaves the AAPL order unfilled (271.537932ms)
+  AssertionError [ERR_ASSERTION]: the rejected quote is reported to the parent
+      at TestContext.<anonymous> (file:///tmp/goose-original-quote-identity-9p5ibuuc/tests/audit-quote-identity.test.mjs:116:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">皇家金鹅银行 · 牛油果</title>
+  <path d="M32 3C23 3 21 13 17 22C12 32 6 38 6 46C6 56 17 62 32 62C47 62 58 56 58 46C58 38 52 32 47 22C43 13 41 3 32 3Z" fill="#28652b"/>
+  <path d="M32 7C26 7 24 16 20 25C15 35 10 40 10 46C10 54 19 58 32 58C45 58 54 54 54 46C54 40 49 35 44 25C40 16 38 7 32 7Z" fill="#83b83b"/>
+  <path d="M32 12C28 12 26 20 23 28C19 36 15 40 15 46C15 52 22 54 32 54C42 54 49 52 49 46C49 40 45 36 41 28C38 20 36 12 32 12Z" fill="#eff2af"/>
+  <circle cx="32" cy="42" r="10.5" fill="#87451f"/>
+  <circle cx="30.5" cy="40.5" r="8.4" fill="#a9642e"/>
+  <ellipse cx="28" cy="37.5" rx="3.5" ry="2.5" fill="#d49451"/>
+</svg>

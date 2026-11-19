@@ -1,0 +1,66 @@
+{
+  "release": "2.0.3",
+  "review_date_hong_kong": "2026-11-19",
+  "input_zip": "royal-golden-goose-v2.0.2.zip",
+  "input_sha256": "7ee2f26218a0d0ec8655a2a4dcaa5e522fb58ea1740d058f40a6f078c649a4d6",
+  "node": "v24.22.1",
+  "verification": {
+    "tests": 298,
+    "pass": 296,
+    "fail": 0,
+    "skip": 2,
+    "skip_reason": "Dedicated real PostgreSQL not configured"
+  },
+  "added_regressions": 21,
+  "original_new_regressions": {
+    "pass": 4,
+    "fail": 17
+  },
+  "nonstock_simulation": {
+    "seeds": 12,
+    "steps": 9600,
+    "successfulActions": 6400,
+    "expectedRejectedActions": 1788,
+    "result": "All cash, reservation, loan, maturity and ledger invariants passed"
+  },
+  "source_changes": [
+    "package.json",
+    "package-lock.json",
+    "public/index.html",
+    "public/site.webmanifest",
+    "public/app.js",
+    "lib/api.mjs",
+    "lib/core.mjs",
+    "lib/quotes.mjs"
+  ],
+  "source_sha256": {
+    "package.json": "7c6395c45c266bd489e10e4fdb7d9036ca2290f08d24864ad5f44dcc29e02f03",
+    "package-lock.json": "6eac58055dae5f8b1e48b738150cfdbc1fb85df6fca9de2e1a21d4a20e827d6b",
+    "server.mjs": "6d03ed64abee7751c8390f35e9017ddbbfe105e1f9d337595aeeedbefceddd3f",
+    "netlify.toml": "30b872fb4d157b388f013fb716bd58ae38c86e38400d9a9f97da852f8951f026",
+    "public/index.html": "3f1df1e545ab82b9ac14ca714c167258002b616123eddf8329759216211daffb",
+    "public/site.webmanifest": "a7d5b91acae8b709f0c970b6fe9d88e96cf9caf375c321c8ff6ca50c4438d3e5",
+    "public/app.js": "dae7f6de1254959e54d5283cf53696883189d5949cb8607783bbf71dfec6f98e",
+    "public/style.css": "379f7de738008de8dd3cb0ef92704f317f8abb1e7399bc85d20692302fd85392",
+    "lib/api.mjs": "8c9b550927ef3d6cc0b41b10ddf86250684b8fb3fae770053801d6bda383936a",
+    "lib/core.mjs": "65069583c987cb9fd9f39bffae2e8bde4f5a855f80ab824f91beca41e8733bef",
+    "lib/local-search.mjs": "84491a35d9d28a1d00e93db8745f7a3393bc51133859f426abcc84854258c1f5",
+    "lib/market.mjs": "9f92b606c7bf1832a5a8d7a194de17b89fd543d6cefa4b925e93244082c9170e",
+    "lib/quotes.mjs": "b0fbf8435817c4c53b4029b11c438b4f01d62acec80383c4ae9835882fab52b4",
+    "lib/store.mjs": "7fe6e9eb654265e34cbc4a60da52209256e73a500cb40860c820b6cbbfc9bea6",
+    "netlify/functions/bank.mjs": "0ac1eeb988f6e1307e9a98774b9693b58ec2229dd43202b2e1c5152e08c5bc17",
+    "netlify/functions/daily-settlement.mjs": "9f512e59f28b8d7bf8539f824f131b50337d124a60959ffa5becae5fd2e1b0fb"
+  },
+  "not_verified_this_run": [
+    "real PostgreSQL/Supabase",
+    "real Netlify deployment and schedule",
+    "real Yahoo API from deployment",
+    "real browser E2E including iPhone Safari",
+    "Netlify function bundling",
+    "remote npm audit"
+  ],
+  "browser_attempt": "Chromium could not start because the environment denied socket creation; no browser E2E results claimed",
+  "schema": 2,
+  "personal_ledger_modified": false,
+  "deployed": false
+}

@@ -1,0 +1,42 @@
+{
+  "version": "1.0.3",
+  "passed": 4,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Failed cold initialization reconnects in the same process after the database starts",
+      "status": "passed",
+      "pid": 31
+    },
+    {
+      "name": "The same warm process survives idle connection loss and database restart",
+      "status": "passed",
+      "pid": 31
+    },
+    {
+      "name": "A real TCP loss during an awaiting financial callback returns a controlled error, rolls back, and recovers in the same process",
+      "status": "passed",
+      "pid": 31,
+      "callbacksOnFailedAttempt": 1,
+      "afterFailureCashCents": 200,
+      "afterRetryCashCents": 500
+    },
+    {
+      "name": "A genuinely committed transaction with a lost reply returns JSON 503 without exiting; the same warm process serves requests and same-key retry credits only once",
+      "status": "passed",
+      "pid": 31,
+      "workerExitCode": null,
+      "responseStatus": 503,
+      "responseCode": "BANK_STORE_UNAVAILABLE",
+      "commitRepliesDeliberatelyLost": 1,
+      "committedCashCents": 800,
+      "nextBootstrapStatus": 200,
+      "retryStatus": 200,
+      "retryDuplicate": true,
+      "afterRetryCashCents": 800
+    }
+  ],
+  "limits": [
+    "Only isolated loopback PostgreSQL and a local wire proxy were used; no user data or cloud accounts."
+  ]
+}

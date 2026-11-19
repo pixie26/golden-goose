@@ -1,0 +1,77 @@
+{
+  "version": "1.0.3",
+  "finding": "RGG-002",
+  "status": "fixed and verified",
+  "production_changes": [
+    "lib/store.mjs"
+  ],
+  "regression_changes": [
+    "tests/database-recovery.test.mjs",
+    "tests/postgres-integration.test.mjs"
+  ],
+  "checks": {
+    "targeted_connection_and_recovery_unit_tests": {
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "command": "node --test tests/database-connection.test.mjs tests/database-recovery.test.mjs tests/release-store.test.mjs"
+    },
+    "real_postgresql_concurrency_rls_transactions": {
+      "passed": 10,
+      "failed": 0,
+      "evidence": "result.json"
+    },
+    "real_wire_faults_and_same_process_recovery": {
+      "passed": 4,
+      "failed": 0,
+      "evidence": "recovery-result.json"
+    },
+    "real_private_ca_tls_and_locks": {
+      "passed": 8,
+      "failed": 0,
+      "evidence": "tls-result.json",
+      "note": "The TLS report has 9 checks; check 9 is the separately listed checked-in PostgreSQL integration test, not an additional TLS case."
+    },
+    "checked_in_postgres_integration": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "postgres-integration-result.json",
+      "configuration": "TEST_DATABASE_URL and TEST_DATABASE_CA_CERT set to a disposable local PostgreSQL 18.6 database with verify-full TLS"
+    },
+    "netlify_official_bundle": {
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "tool": "@netlify/zip-it-and-ship-it 16.6.0",
+      "version": "1.0.3",
+      "runtime": "nodejs24.x",
+      "runtimeAPIVersion": 2,
+      "actualBundler": "nft",
+      "bankRoute": "/api/*",
+      "dailySettlementSchedule": "30 9,22 * * *",
+      "functionAndPgImports": "both functions passed",
+      "configurationGuard": {
+        "cases": 3,
+        "passed": 3,
+        "expectedStatus": 503,
+        "cacheControl": "no-store"
+      },
+      "evidence": "netlify-bundle-result.json",
+      "limits": "Official local bundling and loading; no live Netlify deploy or scheduled trigger.",
+      "sourceSha256": {
+        "lib/core.mjs": "9125708f05a6987fb515a23f96ffa76bbea2b3d09a4e2701829a1c5e9fb8bd29",
+        "lib/store.mjs": "d187d96f65d08822ec8ded1e77576f29667e41097916f3e18df7fe0a34902f9c",
+        "lib/api.mjs": "d0e983e03955f0d41b32cb220cd2223d37b22a66c08317c675f8add0d45cb26c",
+        "netlify.toml": "30b872fb4d157b388f013fb716bd58ae38c86e38400d9a9f97da852f8951f026",
+        "package.json": "99b20c5ec1b209918da6da4801e537568316af6407ce62c3a56cf750f0c431f3"
+      },
+      "sourceUnchangedDuringBundle": true
+    }
+  },
+  "limits": [
+    "No live Netlify deployment or scheduled trigger was run.",
+    "No user Supabase account or production database was accessed."
+  ]
+}

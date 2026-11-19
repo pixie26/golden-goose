@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "browser": "Google Chrome for Testing 153.0.8010.12, headless, via Playwright 1.63.0",
+  "server": "npm run dev equivalent (local JSON ledger) with a deterministic Yahoo stand-in; phase B/C shift the server clock +1 day so closes are final",
+  "viewports": ["desktop 1280x900", "iPhone 13 (390)", "iPhone SE (320)", "iPad Mini", "phone widths 320/360/375/390/414"],
+  "flows": [
+    "first-time setup, parent and Olivia login/logout",
+    "cash grant, task create, task complete + approval, task proposal + approval",
+    "6-month deposit, purchase request, wish -> one-click purchase, loan request + approval + exact pay-off",
+    "Yahoo search, watchlist add (HK and non-tradable JPY), register NVDA then buy keeps NVDA selected, HK buy",
+    "avatar upload (JPEG fixture)",
+    "parent approvals, refund request + refund, manual close for an unfinished US session refused",
+    "manual 'fetch and settle': both orders filled at the target-date close; sell-all order placed",
+    "user text with HTML/script markup rendered as text"
+  ],
+  "result": "all flows passed; no page errors; only console error is the deliberately refused manual close (HTTP 400)",
+  "layout": "V1.0.3 clipped the 5th parent sub-tab at 320/360/375 px; V2.0.0 fits at all five widths"
+}

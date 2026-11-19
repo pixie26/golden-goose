@@ -1,0 +1,32 @@
+{
+  "version": "1.0.3",
+  "date": "2026-11-18",
+  "timezone": "Asia/Hong_Kong",
+  "node": "24.22.1",
+  "verification": {
+    "tests": 246,
+    "pass": 245,
+    "fail": 0,
+    "skipped": 1
+  },
+  "databaseSkippedInMainSuiteWasSeparatelyRun": true,
+  "newRegressionCases": {
+    "settlement": 20,
+    "databaseRecovery": 6,
+    "stockSelection": 15
+  },
+  "productionSourceSha256": {
+    "lib/core.mjs": "9125708f05a6987fb515a23f96ffa76bbea2b3d09a4e2701829a1c5e9fb8bd29",
+    "lib/store.mjs": "d187d96f65d08822ec8ded1e77576f29667e41097916f3e18df7fe0a34902f9c",
+    "lib/api.mjs": "d0e983e03955f0d41b32cb220cd2223d37b22a66c08317c675f8add0d45cb26c",
+    "public/app.js": "1c579a841623591b38d14f519e2e4b6c66001f260c1a496499c45cc29f496ab5",
+    "netlify.toml": "30b872fb4d157b388f013fb716bd58ae38c86e38400d9a9f97da852f8951f026",
+    "package.json": "99b20c5ec1b209918da6da4801e537568316af6407ce62c3a56cf750f0c431f3"
+  },
+  "limits": [
+    "No user Netlify or Supabase account accessed",
+    "No real browser or mobile Safari acceptance this round",
+    "No live Yahoo or scheduled cloud trigger acceptance",
+    "Already-filled historical stock costs are not automatically rewritten"
+  ]
+}

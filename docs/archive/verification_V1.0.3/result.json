@@ -1,0 +1,64 @@
+{
+  "completedAt": "2026-11-18T14:38:10.363Z",
+  "databaseVersion": "PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit",
+  "environment": "Isolated loopback PostgreSQL, synthetic credentials and synthetic ledger only",
+  "checks": [
+    {
+      "name": "Two independent cold starts create one table and one ledger row",
+      "status": "passed",
+      "processIds": [
+        44,
+        45
+      ],
+      "owner": "qa_owner",
+      "rls": true
+    },
+    {
+      "name": "Anonymous and authenticated web roles cannot select or mutate the ledger",
+      "status": "passed"
+    },
+    {
+      "name": "RLS remains default-deny even with a temporary SELECT grant",
+      "status": "passed"
+    },
+    {
+      "name": "Fifty grants across two independent processes preserve every update",
+      "status": "passed",
+      "grants": 50,
+      "cashCents": 5000
+    },
+    {
+      "name": "A concurrent identical credit is committed only once",
+      "status": "passed",
+      "cashCents": 5200
+    },
+    {
+      "name": "A concurrent identical debit opens one deposit and deducts only once",
+      "status": "passed",
+      "cashCents": 4200,
+      "fixedDeposits": 1
+    },
+    {
+      "name": "A callback failure rolls back cash, ledger, audit and idempotency metadata",
+      "status": "passed"
+    },
+    {
+      "name": "An over-budget business action leaves the stored ledger unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "A fresh application process reads the committed ledger without reset",
+      "status": "passed"
+    },
+    {
+      "name": "A database stop and restart preserves the exact ledger snapshot",
+      "status": "passed"
+    }
+  ],
+  "passed": 10,
+  "failed": 0,
+  "limitations": [
+    "Supabase/Supavisor connectivity, TLS and pooler behavior are not exercised by a local PostgreSQL instance.",
+    "Netlify live Functions and scheduled triggers are not exercised."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "date": "2026-11-18",
+  "timezone": "Asia/Hong_Kong",
+  "input": "royal-golden-goose-v1.0.3.zip",
+  "node": ["22.8.0 (minimum)", "22.23.5", "24.22.3"],
+  "verification": {"tests": 258, "pass": 256, "fail": 0, "skipped": 2, "skippedReason": "TEST_DATABASE_URL not set; both real PostgreSQL tests were run separately and passed"},
+  "fixed": ["RGG-004 date-dependent tests", "RGG-005 parent task catalogue / pending orders hidden after 30 days", "RGG-006 page requests could exceed the Netlify 10 s limit while Yahoo hangs", "RGG-007 full ledger read from the database on every 30 s refresh; unbounded settlement quotes", "RGG-008 NUL / split emoji failed the whole jsonb write", "RGG-009 Yahoo 404 reported as a network fault", "RGG-010 parent sub-tab clipped at <=375 px", "RGG-011 stale lockfile engines"],
+  "added": ["Parent notice 90 days before the built-in exchange calendar ends"],
+  "productionSourceSha256": {
+    "lib/api.mjs": "431087785de2fc51a02f8b35749e22a9f1697823c440d76692da979aae01d6d3",
+    "lib/core.mjs": "06d5e1995327560cb43e3b4a8280ec486e11ea4d89e7d6a3bdfa7c6d43f0ef4b",
+    "lib/local-search.mjs": "84491a35d9d28a1d00e93db8745f7a3393bc51133859f426abcc84854258c1f5",
+    "lib/market.mjs": "0968c2e1160deea7fe4196cefff3de5ed86654dcdece511975e96a233764add7",
+    "lib/quotes.mjs": "64e1bb03c6fed04617382fb0c0dc85bd78a9274869b6ffc2dfdbe7881d7fece0",
+    "lib/store.mjs": "7fe6e9eb654265e34cbc4a60da52209256e73a500cb40860c820b6cbbfc9bea6",
+    "server.mjs": "6d03ed64abee7751c8390f35e9017ddbbfe105e1f9d337595aeeedbefceddd3f",
+    "netlify/functions/bank.mjs": "0ac1eeb988f6e1307e9a98774b9693b58ec2229dd43202b2e1c5152e08c5bc17",
+    "netlify/functions/daily-settlement.mjs": "9f512e59f28b8d7bf8539f824f131b50337d124a60959ffa5becae5fd2e1b0fb",
+    "public/app.js": "910fda4ed32f00ad5062c87fd9f6bbb5bd60dfaf70a0a33fd63d41440369f8e3",
+    "public/index.html": "716f17eeb9ec40362679036d96d08406a813a2dd100307b9275520ed2e96fc17",
+    "public/style.css": "37da6a51f1c67a9caba6494b12d4585f2f90f433a263daf3b9734ad9d15443a7",
+    "public/site.webmanifest": "dcd67f3c4f785fe89dc9d6ac7be9a154e8df08025d5fd325d1e50e00c02f415d",
+    "netlify.toml": "30b872fb4d157b388f013fb716bd58ae38c86e38400d9a9f97da852f8951f026",
+    "package.json": "b4d4c5a9a200b63591055d731888053a3573ae26338f9a2f646cf9756df2b5fd",
+    "package-lock.json": "368bca4575cc2c3f182f1e2e9104518fa0201576a3678cd7c3f1c0c15223d855",
+    "scripts/check.mjs": "fc50c3a479b5a8ae77ed7fafea69408b08a42f8fdddedb9b97abd249b4c403c9"
+  },
+  "limits": [
+    "No user Netlify or Supabase account accessed; nothing deployed",
+    "Live Yahoo is unreachable from the verification sandbox; a deterministic Yahoo stand-in was used",
+    "Browser checks used Chrome 153 (desktop and phone emulation); no real iPhone / Safari (WebKit)",
+    "TLS with the Supabase CA not re-run: connection settings unchanged since V1.0.1"
+  ]
+}

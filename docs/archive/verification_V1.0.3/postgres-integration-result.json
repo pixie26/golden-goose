@@ -1,0 +1,19 @@
+{
+  "version": "1.0.3",
+  "command": "node --test tests/postgres-integration.test.mjs",
+  "node": "v24.22.1",
+  "postgresql": "18.6",
+  "tls": "verify-full with a local private CA",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "database": "disposable goose_test database on loopback",
+  "includes": [
+    "Concurrent serialized ledger writes",
+    "Same-key retry commits once",
+    "Row-lock timeout and recovery",
+    "Actual backend termination while financial callback awaits",
+    "Same-process recovery without callback replay"
+  ]
+}

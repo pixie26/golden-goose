@@ -1,0 +1,28 @@
+{
+  "tool": "@netlify/zip-it-and-ship-it",
+  "version": "16.6.0",
+  "functions": [
+    {
+      "name": "bank",
+      "runtimeVersion": "nodejs24.x",
+      "routes": [
+        {
+          "pattern": "/api/*"
+        }
+      ]
+    },
+    {
+      "name": "daily-settlement",
+      "runtimeVersion": "nodejs24.x",
+      "schedule": "30 9,22 * * *"
+    }
+  ],
+  "invocationAgainstPostgreSQL16": {
+    "bootstrap": "uninitialized",
+    "setup": 200,
+    "cashGrant": "ok",
+    "stateCalendarCoverageField": "absent",
+    "scheduledFunction": "200; Yahoo unreachable from this sandbox (ENOTFOUND), reported per symbol without failing the run"
+  },
+  "note": "Local official bundling and invocation of the packaged functions; no production deployment."
+}

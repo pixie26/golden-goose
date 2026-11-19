@@ -1,0 +1,342 @@
+✖ new GBp watch prices preserve their unit through registration and refresh (257.349327ms)
+✖ legacy GBP registration is repaired once from authoritative GBp metadata (271.334038ms)
+✖ new ZAc watch prices preserve their unit through registration and refresh (104.154154ms)
+✖ legacy ZAC registration is repaired once from authoritative ZAc metadata (139.858222ms)
+✖ legitimate whole-pound quotes remain GBP and reject a later pence-unit change (142.207541ms)
+✔ HKD/USD identities stay strict and their cash conversions are unchanged (329.537269ms)
+✖ watch.add existing-security fast path persists the repaired quote unit in its transaction (243.397405ms)
+✖ an earlier dad snapshot response cannot expire or replace a new kid login (362.504133ms)
+✖ an earlier dad 401 response cannot expire or replace a new kid login (124.518401ms)
+✖ an earlier dad 403 response cannot expire or replace a new kid login (133.436138ms)
+✔ an earlier dad snapshot response cannot expire or replace a new dad login (117.416871ms)
+✖ an earlier dad 401 response cannot expire or replace a new dad login (119.296294ms)
+✖ an earlier dad 403 response cannot expire or replace a new dad login (165.354052ms)
+✔ a current-session account mismatch or expiry still returns to login (391.642015ms)
+✖ a matured deposit uses the bank date, confirms principal plus interest, and reports the correct payout (143.88055ms)
+✔ a deposit before its bank maturity date retains the early-redemption warning (108.298501ms)
+✖ order controls follow the server eligibility through a same-day Hong Kong close (109.86294ms)
+✖ older snapshots retain the prior cancel behavior and use a Hong Kong maturity-date fallback (133.379971ms)
+✖ quote labels use the authoritative quote currency without uppercasing subunits (98.540649ms)
+✖ public cancellation permissions agree with the server at regular and half-day closes (253.284554ms)
+✖ public bank date identifies maturity at Hong Kong midnight before scheduled settlement (102.999476ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 4
+ℹ fail 17
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2393.571506
+
+✖ failing tests:
+
+test at tests/final-quote-units.test.mjs:21:2
+✖ new GBp watch prices preserve their unit through registration and refresh (257.349327ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'GBP' !== 'GBp'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-quote-units.test.mjs:23:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'GBP',
+    expected: 'GBp',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-quote-units.test.mjs:36:2
+✖ legacy GBP registration is repaired once from authoritative GBp metadata (271.334038ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 'GBp'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-quote-units.test.mjs:47:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'GBp',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-quote-units.test.mjs:21:2
+✖ new ZAc watch prices preserve their unit through registration and refresh (104.154154ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'ZAC' !== 'ZAc'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-quote-units.test.mjs:23:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ZAC',
+    expected: 'ZAc',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-quote-units.test.mjs:36:2
+✖ legacy ZAC registration is repaired once from authoritative ZAc metadata (139.858222ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 'ZAc'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-quote-units.test.mjs:47:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'ZAc',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-quote-units.test.mjs:58:1
+✖ legitimate whole-pound quotes remain GBP and reject a later pence-unit change (142.207541ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-quote-units.test.mjs:66:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-quote-units.test.mjs:87:1
+✖ watch.add existing-security fast path persists the repaired quote unit in its transaction (243.397405ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'GBP' !== 'GBp'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-quote-units.test.mjs:104:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'GBP',
+    expected: 'GBp',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:62:2
+✖ an earlier dad snapshot response cannot expire or replace a new kid login (362.504133ms)
+  AssertionError [ERR_ASSERTION]: the valid new login remains active
+  
+  null !== 'kid'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:74:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'kid',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:62:2
+✖ an earlier dad 401 response cannot expire or replace a new kid login (124.518401ms)
+  AssertionError [ERR_ASSERTION]: the valid new login remains active
+  
+  null !== 'kid'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:74:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'kid',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:62:2
+✖ an earlier dad 403 response cannot expire or replace a new kid login (133.436138ms)
+  AssertionError [ERR_ASSERTION]: the valid new login remains active
+  
+  null !== 'kid'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:74:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'kid',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:62:2
+✖ an earlier dad 401 response cannot expire or replace a new dad login (119.296294ms)
+  AssertionError [ERR_ASSERTION]: the valid new login remains active
+  
+  null !== 'dad'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:74:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'dad',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:62:2
+✖ an earlier dad 403 response cannot expire or replace a new dad login (165.354052ms)
+  AssertionError [ERR_ASSERTION]: the valid new login remains active
+  
+  null !== 'dad'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:74:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'dad',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:90:1
+✖ a matured deposit uses the bank date, confirms principal plus interest, and reports the correct payout (143.88055ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /已到期，待入账/. Input:
+  
+  '<div class="cols"><section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.3 12 4.5l8.5 4.8z"/><path d="M5.5 10.5v6.5M9.8 10.5v6.5M14.2 10.5v6.5M18.5 10.5v6.5"/><path d="M3.5 19.5h17"/></svg><span>开立定期</span></h3></header><form class="form " data-op="fixed.open" novalidate><div class="choices" role="radiogroup" aria-label="存款期限"><label class="choice"><input type="radio" name="term" value="3" checked><span><b>3个月</b><em>5%</em><small>年利率</small></span></label><label class="choice"><input type="radio" name="term" value="6"><span><b>6个月</b><em>8%</em><small>年利率</small></span></label><label class="choice"><input type="radio" name="term" value="12"><span><b>12个月</b><em>10%</em><small>年利率</small></span></label></div><label class="field"><span>存入金额 O$</span><input name="amount" type="number" inputmode="decimal" step="0.1" min="0.1" placeholder="0.0" required max="0.00" data-budget-amount></label><p class="budget-note"><span>本次最多</span><b class="num">O$ 0.0</b><small>已扣除待处理购物和股票买单的预留金额</small></p><button class="btn btn-primary" type="submit">存入定期</button><p class="hint">提前赎回只退本金、不计利息；到期自动连本带息转回活期。</p></form></section><section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9" fill="currentColor"/><circle cx="4.8" cy="12" r=".9" fill="currentColor"/><circle cx="4.8" cy="17.5" r=".9" fill="currentColor"/></svg><span>我的定期</span></h3></header><div class="record-list" data-record-list="fixed" role="region" aria-label="我的定期"><div class="record-toolbar"><label class="record-filter"><span>分类</span><select data-record-key="fixed" data-record-filter="category" aria-label="我的定期 · 分类"><option value="all" selected>全部分类</option><option value="active">存款中</option><option value="matured">已到期</option><option value="early">已提前赎回</option></select></label><label class="record-filter"><span>时间</span><select data-record-key="fixed" data-record-filter="period" aria-label="我的定期 · 时间"><option value="today">今日</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="month">本月</option><option value="year">今年</option><option value="all" selected>全部时间</option></select></label><label class="record-filter"><span>排序</span><select data-record-key="fixed" data-record-filter="order" aria-label="我的定期 · 排序"><option value="newest" selected>最新在前</option><option value="oldest">最早在前</option></select></label><span class="record-count" aria-live="polite">共 1 条</span></div><ul class="list"><li class="row"><div class="row-main"><b>3个月 · <span class="num">O$ 100.0</span></b><small><span class="nw">2026-08-21 → 2026-11-19</span> · <span class="nw">年息 5%</span></small></div><div class="row-side"><span class="badge live">存款中</span><small class="num">预计利息 O$ 1.2</small></div><div class="row-actions"><button type="button" class="btn btn-sm btn-danger" data-act="fixed.redeem" data-id="4864726a-af04-4871-9233-207c9ef58d66">提前赎回</button></div></li></ul><nav class="record-pagination" aria-label="我的定期分页"><span>1–1 / 1 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="fixed" data-record-page="0" disabled aria-label="我的定期上一页">上一页</button><span class="record-page-number" aria-live="polite">1 / 1</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="fixed" data-record-page="2" disabled aria-label="我的定期下一页">下一页</button></div></nav></div></section></div>'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:96:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="cols"><section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.3 12 4.5l8.5 4.8z"/><path d="M5.5 10.5v6.5M9.8 10.5v6.5M14.2 10.5v6.5M18.5 10.5v6.5"/><path d="M3.5 19.5h17"/></svg><span>开立定期</span></h3></header><form class="form " data-op="fixed.open" novalidate><div class="choices" role="radiogroup" aria-label="存款期限"><label class="choice"><input type="radio" name="term" value="3" checked><span><b>3个月</b><em>5%</em><small>年利率</small></span></label><label class="choice"><input type="radio" name="term" value="6"><span><b>6个月</b><em>8%</em><small>年利率</small></span></label><label class="choice"><input type="radio" name="term" value="12"><span><b>12个月</b><em>10%</em><small>年利率</small></span></label></div><label class="field"><span>存入金额 O$</span><input name="amount" type="number" inputmode="decimal" step="0.1" min="0.1" placeholder="0.0" required max="0.00" data-budget-amount></label><p class="budget-note"><span>本次最多</span><b class="num">O$ 0.0</b><small>已扣除待处理购物和股票买单的预留金额</small></p><button class="btn btn-primary" type="submit">存入定期</button><p class="hint">提前赎回只退本金、不计利息；到期自动连本带息转回活期。</p></form></section><section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9" fill="currentColor"/><circle cx="4.8" cy="12" r=".9" fill="currentColor"/><circle cx="4.8" cy="17.5" r=".9" fill="currentColor"/></svg><span>我的定期</span></h3></header><div class="record-list" data-record-list="fixed" role="region" aria-label="我的定期"><div class="record-toolbar"><label class="record-filter"><span>分类</span><select data-record-key="fixed" data-record-filter="category" aria-label="我的定期 · 分类"><option value="all" selected>全部分类</option><option value="active">存款中</option><option value="matured">已到期</option><option value="early">已提前赎回</option></select></label><label class="record-filter"><span>时间</span><select data-record-key="fixed" data-record-filter="period" aria-label="我的定期 · 时间"><option value="today">今日</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="month">本月</option><option value="year">今年</option><option value="all" selected>全部时间</option></select></label><label class="record-filter"><span>排序</span><select data-record-key="fixed" data-record-filter="order" aria-label="我的定期 · 排序"><option value="newest" selected>最新在前</option><option value="oldest">最早在前</option></select></label><span class="record-count" aria-live="polite">共 1 条</span></div><ul class="list"><li class="row"><div class="row-main"><b>3个月 · <span class="num">O$ 100.0</span></b><small><span class="nw">2026-08-21 → 2026-11-19</span> · <span class="nw">年息 5%</span></small></div><div class="row-side"><span class="badge live">存款中</span><small class="num">预计利息 O$ 1.2</small></div><div class="row-actions"><button type="button" class="btn btn-sm btn-danger" data-act="fixed.redeem" data-id="4864726a-af04-4871-9233-207c9ef58d66">提前赎回</button></div></li></ul><nav class="record-pagination" aria-label="我的定期分页"><span>1–1 / 1 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="fixed" data-record-page="0" disabled aria-label="我的定期上一页">上一页</button><span class="record-page-number" aria-live="polite">1 / 1</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="fixed" data-record-page="2" disabled aria-label="我的定期下一页">下一页</button></div></nav></div></section></div>',
+    expected: /已到期，待入账/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:116:1
+✖ order controls follow the server eligibility through a same-day Hong Kong close (109.86294ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /data-act="stock.cancel" data-id="hk-closed"/. Input:
+  
+  '<section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>股票订单</span></h3></header><div class="record-list" data-record-list="orders" role="region" aria-label="股票订单"><div class="record-toolbar"><label class="record-filter"><span>分类</span><select data-record-key="orders" data-record-filter="category" aria-label="股票订单 · 分类"><option value="all" selected>全部分类</option><option value="pending">待成交</option><option value="filled">已成交</option><option value="cancelled">已取消</option></select></label><label class="record-filter"><span>时间</span><select data-record-key="orders" data-record-filter="period" aria-label="股票订单 · 时间"><option value="today">今日</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="month">本月</option><option value="year">今年</option><option value="all" selected>全部时间</option></select></label><label class="record-filter"><span>排序</span><select data-record-key="orders" data-record-filter="order" aria-label="股票订单 · 排序"><option value="newest" selected>最新在前</option><option value="oldest">最早在前</option></select></label><span class="record-count" aria-live="polite">共 2 条</span></div><ul class="list"><li class="row"><div class="row-main"><b>买入 0700.HK</b><small><span class="nw">目标交易日 2026-11-19</span> · <span class="nw">预留 O$ 10.0</span></small><small class="faint">下单 2026-11-19 11:00</small></div><div class="row-side"><span class="badge pending">待成交</span><button type="button" class="btn btn-sm btn-danger" data-act="stock.cancel" data-id="hk-closed">撤单</button></div></li><li class="row"><div class="row-main"><b>买入 AAPL</b><small><span class="nw">目标交易日 2026-11-19</span> · <span class="nw">预留 O$ 10.0</span></small><small class="faint">下单 2026-11-19 11:00</small></div><div class="row-side"><span class="badge pending">待成交</span><button type="button" class="btn btn-sm btn-danger" data-act="stock.cancel" data-id="us-open">撤单</button></div></li></ul><nav class="record-pagination" aria-label="股票订单分页"><span>1–2 / 2 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="orders" data-record-page="0" disabled aria-label="股票订单上一页">上一页</button><span class="record-page-number" aria-live="polite">1 / 1</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="orders" data-record-page="2" disabled aria-label="股票订单下一页">下一页</button></div></nav></div></section>'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:124:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>股票订单</span></h3></header><div class="record-list" data-record-list="orders" role="region" aria-label="股票订单"><div class="record-toolbar"><label class="record-filter"><span>分类</span><select data-record-key="orders" data-record-filter="category" aria-label="股票订单 · 分类"><option value="all" selected>全部分类</option><option value="pending">待成交</option><option value="filled">已成交</option><option value="cancelled">已取消</option></select></label><label class="record-filter"><span>时间</span><select data-record-key="orders" data-record-filter="period" aria-label="股票订单 · 时间"><option value="today">今日</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="month">本月</option><option value="year">今年</option><option value="all" selected>全部时间</option></select></label><label class="record-filter"><span>排序</span><select data-record-key="orders" data-record-filter="order" aria-label="股票订单 · 排序"><option value="newest" selected>最新在前</option><option value="oldest">最早在前</option></select></label><span class="record-count" aria-live="polite">共 2 条</span></div><ul class="list"><li class="row"><div class="row-main"><b>买入 0700.HK</b><small><span class="nw">目标交易日 2026-11-19</span> · <span class="nw">预留 O$ 10.0</span></small><small class="faint">下单 2026-11-19 11:00</small></div><div class="row-side"><span class="badge pending">待成交</span><button type="button" class="btn btn-sm btn-danger" data-act="stock.cancel" data-id="hk-closed">撤单</button></div></li><li class="row"><div class="row-main"><b>买入 AAPL</b><small><span class="nw">目标交易日 2026-11-19</span> · <span class="nw">预留 O$ 10.0</span></small><small class="faint">下单 2026-11-19 11:00</small></div><div class="row-side"><span class="badge pending">待成交</span><button type="button" class="btn btn-sm btn-danger" data-act="stock.cancel" data-id="us-open">撤单</button></div></li></ul><nav class="record-pagination" aria-label="股票订单分页"><span>1–2 / 2 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="orders" data-record-page="0" disabled aria-label="股票订单上一页">上一页</button><span class="record-page-number" aria-live="polite">1 / 1</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="orders" data-record-page="2" disabled aria-label="股票订单下一页">下一页</button></div></nav></div></section>',
+    expected: /data-act="stock.cancel" data-id="hk-closed"/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:130:1
+✖ older snapshots retain the prior cancel behavior and use a Hong Kong maturity-date fallback (133.379971ms)
+  AssertionError [ERR_ASSERTION]: fallback uses Hong Kong 20 November, not UTC 19 November
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:133:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="cols"><section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.3 12 4.5l8.5 4.8z"/><path d="M5.5 10.5v6.5M9.8 10.5v6.5M14.2 10.5v6.5M18.5 10.5v6.5"/><path d="M3.5 19.5h17"/></svg><span>开立定期</span></h3></header><form class="form " data-op="fixed.open" novalidate><div class="choices" role="radiogroup" aria-label="存款期限"><label class="choice"><input type="radio" name="term" value="3" checked><span><b>3个月</b><em>5%</em><small>年利率</small></span></label><label class="choice"><input type="radio" name="term" value="6"><span><b>6个月</b><em>8%</em><small>年利率</small></span></label><label class="choice"><input type="radio" name="term" value="12"><span><b>12个月</b><em>10%</em><small>年利率</small></span></label></div><label class="field"><span>存入金额 O$</span><input name="amount" type="number" inputmode="decimal" step="0.1" min="0.1" placeholder="0.0" required max="0.00" data-budget-amount></label><p class="budget-note"><span>本次最多</span><b class="num">O$ 0.0</b><small>已扣除待处理购物和股票买单的预留金额</small></p><button class="btn btn-primary" type="submit">存入定期</button><p class="hint">提前赎回只退本金、不计利息；到期自动连本带息转回活期。</p></form></section><section class="card"><header class="card-h"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9" fill="currentColor"/><circle cx="4.8" cy="12" r=".9" fill="currentColor"/><circle cx="4.8" cy="17.5" r=".9" fill="currentColor"/></svg><span>我的定期</span></h3></header><div class="record-list" data-record-list="fixed" role="region" aria-label="我的定期"><div class="record-toolbar"><label class="record-filter"><span>分类</span><select data-record-key="fixed" data-record-filter="category" aria-label="我的定期 · 分类"><option value="all" selected>全部分类</option><option value="active">存款中</option><option value="matured">已到期</option><option value="early">已提前赎回</option></select></label><label class="record-filter"><span>时间</span><select data-record-key="fixed" data-record-filter="period" aria-label="我的定期 · 时间"><option value="today">今日</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="month">本月</option><option value="year">今年</option><option value="all" selected>全部时间</option></select></label><label class="record-filter"><span>排序</span><select data-record-key="fixed" data-record-filter="order" aria-label="我的定期 · 排序"><option value="newest" selected>最新在前</option><option value="oldest">最早在前</option></select></label><span class="record-count" aria-live="polite">共 1 条</span></div><ul class="list"><li class="row"><div class="row-main"><b>3个月 · <span class="num">O$ 100.0</span></b><small><span class="nw">2026-08-20 → 2026-11-20</span> · <span class="nw">年息 5%</span></small></div><div class="row-side"><span class="badge live">存款中</span><small class="num">预计利息 O$ 1.3</small></div><div class="row-actions"><button type="button" class="btn btn-sm btn-danger" data-act="fixed.redeem" data-id="legacy-fixed">提前赎回</button></div></li></ul><nav class="record-pagination" aria-label="我的定期分页"><span>1–1 / 1 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="fixed" data-record-page="0" disabled aria-label="我的定期上一页">上一页</button><span class="record-page-number" aria-live="polite">1 / 1</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="fixed" data-record-page="2" disabled aria-label="我的定期下一页">下一页</button></div></nav></div></section></div>',
+    expected: />到期取回<\/button>/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/final-ui-audit.test.mjs:138:1
+✖ quote labels use the authoritative quote currency without uppercasing subunits (98.540649ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '123.5 GBP'
+  - '123.5 GBp'
+             ^
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-ui-audit.test.mjs:140:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '123.5 GBP',
+    expected: '123.5 GBp',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-view-audit.test.mjs:12:1
+✖ public cancellation permissions agree with the server at regular and half-day closes (253.284554ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-view-audit.test.mjs:22:43
+      at at (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-view-audit.test.mjs:7:13)
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-view-audit.test.mjs:21:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/final-view-audit.test.mjs:34:1
+✖ public bank date identifies maturity at Hong Kong midnight before scheduled settlement (102.999476ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - '2026-11-19'
+  
+      at file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-view-audit.test.mjs:37:32
+      at at (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-view-audit.test.mjs:7:13)
+      at TestContext.<anonymous> (file:///workspace/scratch/21deeede988d/audit-work/original-v2.0.2/royal-golden-goose/tests/final-view-audit.test.mjs:36:2)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: '2026-11-19',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

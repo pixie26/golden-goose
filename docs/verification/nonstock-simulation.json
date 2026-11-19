@@ -1,0 +1,7 @@
+{
+  "seeds": 12,
+  "steps": 9600,
+  "successfulActions": 6400,
+  "expectedRejectedActions": 1788,
+  "result": "All cash, reservation, loan, maturity and ledger invariants passed"
+}

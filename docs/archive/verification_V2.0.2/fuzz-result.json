@@ -1,0 +1,70 @@
+{
+  "tool": "scratch randomized model (not part of the project): 1,500 random actions per run — buys, sells, kid and parent cancels, purchases, deposits, loans, Yahoo refreshes, scheduled maintenance, parent manual closes, manual rolls and time jumps",
+  "truthModel": "each stock trades on real exchange days (HK general holidays after 2027 unknown to the app), plus random special market closures and 1–12-day suspensions; Yahoo per symbol either fails (~15%), lags 1–2 sessions (~15%), or returns the complete daily series",
+  "invariants": [
+    "cash equals the ledger sum; no negative cash or available balance",
+    "reserved cash equals pending buy budgets",
+    "positions, cost basis and realized P&L equal a chronological replay of fills",
+    "every order not rolled by hand keeps its placement-time session as rolledFrom/targetDate and never moves backwards",
+    "every fill uses the first real close at or after that session, at that day's true price",
+    "no fill uses a close that was already final when the order was submitted",
+    "after a final full Yahoo refresh no order is left pending"
+  ],
+  "runs": [
+    {
+      "start": "2026-11-02",
+      "runs": 25,
+      "failed": 0,
+      "autoRolls": 379
+    },
+    {
+      "start": "2027-11-15",
+      "runs": 25,
+      "failed": 0,
+      "autoRolls": 480
+    },
+    {
+      "start": "2028-12-01",
+      "runs": 25,
+      "failed": 0,
+      "autoRolls": 636
+    },
+    {
+      "start": "2031-01-10",
+      "runs": 25,
+      "failed": 0,
+      "autoRolls": 535
+    }
+  ],
+  "total": {
+    "runs": 100,
+    "stepsPerRun": 1500,
+    "failed": 0,
+    "autoRolls": 2030
+  },
+  "sameModelOnV2_0_1": {
+    "start": "2027-11-15",
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "ordersStuckAfterFinalRefresh": [
+      92,
+      150,
+      162,
+      100,
+      104
+    ],
+    "v2_0_2": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "note": "V2.0.1 keeps every order behind a session without a close waiting; V2.0.2 fills them at the first later close"
+  }
+}

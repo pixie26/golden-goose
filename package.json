@@ -1,0 +1,22 @@
+{
+  "name": "royal-bank-of-golden-goose",
+  "version": "2.0.3",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.8.0"
+  },
+  "scripts": {
+    "dev": "node server.mjs",
+    "lan": "node server.mjs --lan",
+    "start": "node server.mjs",
+    "build": "node scripts/check.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "npm run check && npm test"
+  },
+  "dependencies": {
+    "pg": "^8.16.0"
+  },
+  "description": "金鹅银行：Olivia 的家庭银行正式 2.0 版"
+}

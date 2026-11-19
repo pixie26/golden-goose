@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "bundler": "@netlify/zip-it-and-ship-it 16.6.0 (official), config as netlify.toml (esbuild, external pg)",
+  "functions": [
+    {"name": "bank", "runtime": "nodejs24.x", "bundler": "nft", "route": "/api/*"},
+    {"name": "daily-settlement", "runtime": "nodejs24.x", "bundler": "nft", "schedule": "30 9,22 * * *"}
+  ],
+  "invokedAgainstRealPostgres": "bundled modules called with Requests: bootstrap, setup, login, cash grant, state (parent sees calendarCoverage), scheduled run (Yahoo unreachable -> listed errors, HTTP 200)"
+}

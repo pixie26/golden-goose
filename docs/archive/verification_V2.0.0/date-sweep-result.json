@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "method": "libfaketime 0.9.10 shifts the whole process clock (including vm contexts); DONT_FAKE_MONOTONIC=1; full suite per offset; base time 2026-11-18 ~15:20 UTC",
+  "V1.0.3": {
+    "+3h, +9h, +15h, +21h, +3d, +4d": [
+      "the task price editor uses the same O$0.1 step that the server enforces"
+    ],
+    "+37d, +44d, +82d, +800d": [
+      "task price editor",
+      "timestamps show the viewer local date (HK), not the UTC date"
+    ],
+    "+200d, +420d": [
+      "task price editor",
+      "timestamps",
+      "early-redeemed deposit shows no interest; active deposit shows its estimate"
+    ]
+  },
+  "V2.0.0": {
+    "+1h": 0,
+    "+6h": 0,
+    "+9h": 0,
+    "+13h": 0,
+    "+21h": 0,
+    "+3d": 0,
+    "+37d": 0,
+    "+44d": 0,
+    "+82d": 0,
+    "+120d": 0,
+    "+200d": 0,
+    "+222d": 0,
+    "+420d": 0,
+    "+800d": 0
+  },
+  "notes": "+3d is a Saturday, +37d Christmas Day, +44d New Year’s Day, +82d an HKEX Lunar New Year holiday; +800d is beyond both built-in calendars"
+}

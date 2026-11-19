@@ -1,0 +1,31 @@
+{
+  "tool": "@netlify/zip-it-and-ship-it",
+  "version": "16.6.0",
+  "functions": [
+    {
+      "name": "bank",
+      "runtimeAPIVersion": 2,
+      "runtimeVersion": "nodejs24.x",
+      "routes": [
+        {
+          "pattern": "/api/*",
+          "expression": "^\\/api(?:\\/(.*))\\/?$",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "name": "daily-settlement",
+      "runtimeAPIVersion": 2,
+      "runtimeVersion": "nodejs24.x",
+      "routes": [],
+      "schedule": "30 9,22 * * *"
+    }
+  ],
+  "note": "Local official bundling only; no production deployment or database connection.",
+  "moduleLoadSmoke": {
+    "bank": true,
+    "scheduled": true,
+    "unconfiguredGuard": true
+  }
+}

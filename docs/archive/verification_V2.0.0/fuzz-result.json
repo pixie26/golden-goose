@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "method": "randomized actions against lib/core.mjs with a simulated clock: grants, buys/sells/cancels, purchases/approvals/refunds, deposits/redemptions, loans/repayments, out-of-order and batched daily closes, maintenance, parent rolls and manual closes",
+  "seeds": 42,
+  "runs": "30 seeds x 1,500 steps (about 2 simulated months); 12 seeds x 4,000 steps reaching 2027-08 to 2028-05, which exercises quote pruning",
+  "invariantsAfterEveryStep": [
+    "cash equals the sum of ledger deltas and is never negative",
+    "stock reservation equals the budgets of pending buys; available cash never negative",
+    "each position's shares, cost and every sell's realized P&L equal a chronological replay of its fills",
+    "public views render for both roles"
+  ],
+  "drain": "after delivering every final close and settling, no order with a closed target date stays pending",
+  "violations": 0
+}

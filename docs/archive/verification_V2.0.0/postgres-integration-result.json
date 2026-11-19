@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "server": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1), local throwaway instance",
+  "runs": [
+    {"connection": "direct, sslmode=disable", "node": "22.23.5 and 24.22.3", "tests": 2, "pass": 2},
+    {"connection": "TEST_DATABASE_POOLER_URL through PgBouncer 1.22.0, pool_mode=transaction", "node": "22.23.5", "tests": 2, "pass": 2}
+  ],
+  "covers": [
+    "concurrent writes from two store instances serialize; same request key commits once",
+    "held row lock: write fails at lock_timeout (~4 s) through the pooler, then recovers",
+    "backend terminated while the financial callback awaits: no commit, no replay, same process recovers",
+    "V2.0.0 row-version query: unchanged row returns no ledger body; stale version returns the full row",
+    "a commit by another instance is visible to the next read and to the next locked write",
+    "NUL and an emoji cut by the length limit are normalized and commit (V1.0.3: 503 BANK_STORE_UNAVAILABLE, causes 22P05 / 22P02)",
+    "database restart changes the row version (xmin unchanged, server start time changed); the store reconnects"
+  ]
+}

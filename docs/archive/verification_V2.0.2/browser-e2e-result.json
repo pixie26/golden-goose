@@ -1,0 +1,34 @@
+{
+  "browser": "Google Chrome (Playwright 1.63, headless) against the local server with a deterministic Yahoo stand-in; server and page clocks shifted per scenario",
+  "phases": {
+    "A-C (existing V2.0 flows, 2026-11-19/20)": {
+      "devices": [
+        "desktop 1280x900",
+        "iPhone SE",
+        "iPhone 13",
+        "iPad Mini"
+      ],
+      "result": "all flows passed: setup, logins, cash, tasks, fixed deposit, shopping and refund, loan and payoff, wishes, Yahoo search/watch/register, buys, settlement, sell-all, avatar; every kid and parent page on three devices",
+      "notes": [
+        "'quote.set unfinished day refused' expects a still-open US session; at this run time (19:50 New York) the US close was already final, so the entry was correctly accepted",
+        "the improved width check flags the closed notification panel's hidden header text on iPhone SE; it is not visible and causes no horizontal scrolling (document width 320 px); unchanged since V2.0.0"
+      ]
+    },
+    "D (V2.0.2 roll and parent cancel, Ching Ming 2028)": {
+      "devices": [
+        "desktop 1280x900",
+        "iPhone SE",
+        "iPhone 13"
+      ],
+      "checks": [
+        "orders placed Mon 3 Apr 2028 17:45 HKT target Tue 4 Apr (holiday unknown to the calendar)",
+        "refresh on 4 Apr 17:35: no bar and nothing later — orders wait with no warning and no roll; no manual roll button; Olivia's cancel after 16:00 is refused",
+        "refresh on 5 Apr 17:35: 0700.HK rolled from 4 Apr to 5 Apr and filled at the 5 Apr close",
+        "2800.HK (suspended from 5 Apr) still waiting; parent sees 撤销订单; manual close form defaults to 2800.HK / 2028-04-04",
+        "parent cancel: toast, reservation released, Olivia's notification, order rows explain the roll and the cancel",
+        "phone layouts: the roll note wraps on a 320 px screen (fixed during this run: it first overflowed inside a no-wrap span)"
+      ],
+      "result": "all checks passed; the only console error is the HTTP 400 of the deliberately refused cancel"
+    }
+  }
+}

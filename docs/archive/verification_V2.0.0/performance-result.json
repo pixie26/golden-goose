@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "databaseEgress": {
+    "method": "PostgreSQL 16 behind a byte-counting TCP proxy; ledger = the 1-day browser-acceptance ledger (9 tracked securities, ~0.43 MB compact JSON)",
+    "V1.0.3": {"20 unchanged page reads": "9.1 MB", "one write + next read": "0.91 MB"},
+    "V2.0.0": {"20 unchanged page reads": "2.4 KB", "one write + next read": "0.45 MB"}
+  },
+  "hangingYahooPageRequests": {
+    "method": "Yahoo accepts and never answers; four requests in parallel against the local API",
+    "V1.0.3_ms": {"search": 11004, "register offline-directory stock": 22010, "register unknown code": 11005, "parent fetch and settle": 20023},
+    "V2.0.0_ms": "all four about 7,200; search falls back to the offline directory, registration saves with a warning, refresh saves what it fetched"
+  }
+}

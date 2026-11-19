@@ -1,0 +1,306 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> royal-bank-of-golden-goose@1.0.3 verify
+> npm run check && npm test
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> royal-bank-of-golden-goose@1.0.3 check
+> node scripts/check.mjs
+
+金鹅银行 V1.0.3: 11 source files and 16 asset references checked.
+Ready: public/ + netlify/functions/ (database and setup token are configured in Netlify).
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> royal-bank-of-golden-goose@1.0.3 test
+> node --test tests/*.test.mjs
+
+✔ both roles initially see old deposits, loans and wishes across all-time ten-item pages (193.938096ms)
+✔ other dated records retain a 30-day default and invalid periods return to each list default (14.224197ms)
+✔ all-time defaults do not overwrite manually chosen date filters or break category paging (18.816198ms)
+✔ Olivia uploads/replaces/removes her own avatar without parent approval, without mutating financial balances (345.488738ms)
+✔ rejects SVG, malformed JPEG, nonsquare images, overlarge data and preserves old V1.3 states (6.01129ms)
+✔ home page code renders stock mark-to-market, P&L, holding count and trade-date labels (3.596771ms)
+✔ API persists avatar JPEG with a request body larger than the previous 16 KiB limit (402.678112ms)
+✔ V1.9 login and first-time setup both use selected royal goose and new fairytale scene (102.086825ms)
+✔ V1.9 home displays the existing watchlist with price, market, date, 1D/1W/YTD (324.02485ms)
+✔ V1.9 empty watchlist has a clear add-stocks action and keeps the old investment snapshot (47.049032ms)
+✔ V1.9 profile icons distinguish Olivia and parent while keeping avatar upload (72.414917ms)
+✔ browser and mobile icons use the simplified avocado while the site keeps its goose brand (7.440861ms)
+✔ setup requires token; dad password and child pin are hashed (255.13887ms)
+✔ no deposit request: dad directly credits real-backed funds, child cannot self-credit (88.915949ms)
+✔ child opens and redeems fixed deposit without dad approval; early interest is zero (123.799377ms)
+✔ redeem after deposit matures but before maintenance pays maturity interest, not zero (89.970548ms)
+✔ dad approves + delivers in ONE step; Olivia requests return, dad refunds once (82.541341ms)
+✔ refunds require one child request, cannot be withdrawn, and a rejection is final for that order (89.38649ms)
+✔ legacy V1.5 approved-and-debited purchases remain refundable without double cash debit (80.927283ms)
+✔ duplicate requests cannot double-debit (87.635289ms)
+✔ loan cap O$500; loan proceeds do not create equity; repay interest first (84.676736ms)
+✔ buy order holds funds, exactly dated close fills fractional shares (127.876872ms)
+✔ US stock uses USD 1 = O$8 and records closing date (93.361692ms)
+✔ sell reservations prevent overselling same position (95.65077ms)
+✔ multiple purchase requests cannot overcommit available cash before approval (87.179582ms)
+✔ maturity runs only once (108.621642ms)
+✔ only dad may approve or set quotes (91.836675ms)
+✔ HK and US pre-open and intraday orders use same-day close; after close use next session (3.568888ms)
+✔ US DST works; HK and NYSE exchange holidays and early closings are honored (1.296985ms)
+✔ cannot mark partial session price as final close or cancel after target session close (108.90425ms)
+✔ exchange holiday auto-rolls, missing weekday data does not skip to later date (88.657646ms)
+✔ watchlist is capped at ten, supports Yahoo securities from any exchange; trades remain HK/US only (80.762817ms)
+✔ watchlist daily weekly ytd results use price history; insufficient data does not invent returns (248.077768ms)
+✔ quote parser excludes unfinished session and includes completed closing date (1.991388ms)
+✔ V1.7: a HK order cannot fill from a delayed pre-auction price inside the settlement window (109.169585ms)
+✔ V1.7: loan "pay off all" settles the exact cent amount after accrual (83.265119ms)
+✔ V1.7: only HK/USD and US/USD securities can be registered for trading (78.97854ms)
+✔ the documented Supabase URL (sslmode=require) encrypts without failing on Supabase's own CA (7.964124ms)
+✔ DATABASE_CA_CERT turns on full verification, including a one-line value with literal \n (15.113437ms)
+✔ verify-full without a CA uses the public CA list; a remote host defaults to TLS; local and explicit disable stay plain (1.132387ms)
+✔ timeouts are never sent as connection startup parameters; other URL options are kept (0.894679ms)
+✔ a malformed DATABASE_URL is a store-unavailable error with a readable cause (1.522547ms)
+✔ server logs name the root cause but never a credential embedded in a URL (0.671678ms)
+✔ a reused physical client keeps one error listener and every checkout is released once (286.64306ms)
+✔ a Client error during initialization is controlled and destroys its client and pool before reconnecting (140.277733ms)
+✔ a disconnect while the financial callback awaits kills no process, commits nothing, and does not replay the callback (159.672286ms)
+✔ a committed write with a lost reply returns a controlled error and same-process same-key retry cannot credit twice (163.841683ms)
+✔ a connection lost immediately after a successful COMMIT acknowledgement is destroyed even without rollback (137.780505ms)
+✔ the API returns private controlled JSON 503 for a lost COMMIT reply and accepts a same-process retry (225.334327ms)
+✔ fixed deposit cap uses spendable cash after shopping and stock reservations (296.838566ms)
+✔ one-decimal cap never advertises more than the next valid amount step (140.841598ms)
+✔ zero available cash is shown as zero and becomes available after a reservation is released (141.911859ms)
+✔ a visibility refresh does not erase a form that became dirty while awaiting the server (331.307441ms)
+✔ idle visibility refresh updates data, but a newer action state wins over an older in-flight read (143.93596ms)
+✔ failed submissions send the typed one-character name and leave the form ready to correct (138.932871ms)
+✔ notification polling also discards a snapshot superseded by a completed action (137.038906ms)
+✔ pagination drafts preserve matching forms and selections without copying identities or secrets (126.970331ms)
+✔ Chinese validation covers money, quantity, precise steps and declared field formats without rewriting values (685.445012ms)
+✔ finer money bounds remain exact and never display a rounded allowance that could permit overspending (143.413183ms)
+✔ an invalid repay form stops before FormData, confirmation or POST; an autofilled correction succeeds on the next attempt (204.5134ms)
+✔ all invalid fields are localized but only the first is reported, and one-character wish names remain valid (156.131937ms)
+✔ invalid capture localizes fallback validation and both input/change clear old messages (143.204186ms)
+✔ manual validation skips hidden/disabled controls and tolerates existing DOM-light test adapters (126.377131ms)
+✔ actual home HTML shows investment summary, exact holdings, quote dates and Olivia photo picker (51.370612ms)
+✔ actual home HTML gracefully handles legacy account, no portfolio and dad role (52.140357ms)
+✔ real local HTTP server forwards ?q= keyword to Yahoo search API (570.03913ms)
+✔ approval creates one persistent Olivia-only red-dot message; reading does not modify the cash ledger (207.369141ms)
+✔ task approval, rejection and task completion results appear in Olivia inbox (146.791831ms)
+✔ loan and final return decisions are notified for separate requests (120.05956ms)
+✔ V1.9.1 data without notifications remains readable and is migrated on first decision (126.338498ms)
+✔ Olivia UI has notification button and counts unread decisions; Dad retains pending red count (230.242077ms)
+✔ every 待处理 list opens on 全部时间, so requests older than 30 days can be handled straight away (337.602422ms)
+✔ 待处理 keeps the time filter: an explicit 30-day choice hides older items with a recovery link; bad values fall back to all time (180.135851ms)
+✔ 待处理 paging stays ten per page under all time; Olivia's own lists keep their 30-day default (180.142731ms)
+✔ an empty 待处理 page is unchanged (133.806034ms)
+﹣ real PostgreSQL: TLS as configured, ledger writes are serialized, same-key retries commit once, row locks time out cleanly (1.504805ms) # set TEST_DATABASE_URL to run real PostgreSQL checks
+✔ the screenshot wish 鞋 is accepted; whitespace-only names still fail in wishes and shopping (211.84908ms)
+✔ shopping request equal to available cash succeeds; one cent over fails without changing state (122.975013ms)
+✔ shopping and stock applications share one spending limit; fixed deposits cannot consume held funds (166.883245ms)
+✔ loan repayment also respects shopping reservations (122.698881ms)
+✔ approval consumes its own reservation, releases a lower final price, and is idempotent (122.887935ms)
+✔ rejection releases only that request reservation without a debit (233.651719ms)
+✔ stock fill and cancellation preserve shopping reservations (122.117077ms)
+✔ old pending shopping requests remain readable and cannot consume a newer reservation (123.023189ms)
+✔ one-click wish purchase uses saved name and price, reserves once, and waits for parent approval (118.489224ms)
+✔ wish conversion checks current spendable cash, existence and Olivia role on the server (128.188419ms)
+✔ rejected or refunded wish applications may be retried; a pending return cannot be duplicated (126.414687ms)
+✔ purchase holds and wish links survive save/reload and older retained history is exposed for pagination (123.113096ms)
+✔ dated lists default to 30 local calendar days; undated, invalid and future records stay accessible in All time (59.121642ms)
+✔ Today and This year use Hong Kong midnight and year boundaries, not UTC calendar dates (4.875026ms)
+✔ time-hidden hint recovers only the selected category, resets pagination and updates just that list (8.03364ms)
+✔ explicit 30-day filtering of older deposits and loans retains recovery; parent task approvals default to all time (V1.9.10) and keep 30-day recovery (14.201539ms)
+✔ both roles see every active available task without filters, with ten per page and completion forms retained (14.356125ms)
+✔ current holdings remain an undated catalog, and active loan status is clearly labelled 待还清 (3.631206ms)
+✔ wish-linked purchase navigation explicitly reveals an old target outside the default 30-day window (6.434193ms)
+✔ records expose all pages of long history, sort stably, clamp after shrinking, and never mutate input (85.179144ms)
+✔ record category and local calendar date filters cover 7 days, 30 days and current month (21.866482ms)
+✔ shopping, stocks, task proposals and completed tasks have ten-row pages with older records still accessible (48.7362ms)
+✔ ledger categories expose retained entries beyond the former 150-row cutoff and escape record names (32.552001ms)
+✔ record paging updates one list, keeps surrounding forms intact and resets filters to page one (21.297282ms)
+✔ parent editing and inbox actions stay available after pagination (25.003452ms)
+[bank-api] 只有家长可以执行此操作
+✔ refund API delivers the request to the parent and credits the exact amount only once (424.177118ms)
+[bank-api] 该订单不能退货：没有待处理的退款申请或已处理
+[bank-api] 退款申请提交后不能撤回，每笔订单只能申请一次
+[bank-api] 每笔订单只能申请退款一次，不能再次申请
+[bank-api] 已超过购买后 7 天的退款申请期限
+[bank-api] 该订单不能退货：没有待处理的退款申请或已处理
+✔ refund API blocks withdrawal, a second attempt after rejection, expired requests and direct parent refunds (457.17252ms)
+[bank-api] 只有家长可以执行此操作
+[bank-api] 未还本金与待审批借款合计不能超过 O$ 125.5，目前还可申请 O$ 45.5
+[bank-api] 未还本金与待审批借款合计不能超过 O$ 125.5，目前还可申请 O$ 0.0
+[bank-api] 未还本金与待审批借款合计不能超过 O$ 50.0；请先处理其他申请或调整限额
+[bank-api] 家长已暂停新增借款
+✔ loan limit API is parent-only, persists and reserves capacity across concurrent pending requests (319.102458ms)
+✔ refund request is accepted at the exact seven-day deadline and rejected one millisecond later (323.498921ms)
+✔ a valid request stays in the parent inbox after the window and is refunded exactly once (144.122569ms)
+✔ one request cannot be cancelled, repeated with a new key, or re-opened after rejection (156.675273ms)
+✔ legacy cancelled and rejected requests consume their one opportunity without resetting history (130.699441ms)
+✔ legacy delivery cannot restart an expired purchase window; unknown dates stay closed (132.895574ms)
+✔ unbought orders have no refund deadline and a parent cannot directly refund or impersonate a request (135.637126ms)
+✔ loan limit defaults to 500 for both new and legacy states and only the parent may configure it (144.72494ms)
+✔ outstanding principal plus pending loan requests reserve the configurable shared limit (142.596664ms)
+✔ rejected requests release loan room, and lowering the cap preserves debt while rechecking approvals (143.718153ms)
+✔ zero limit disables new lending and pending approvals while existing borrowing remains repayable (128.392552ms)
+✔ loan setting rejects malformed, negative, overly precise and out-of-range amounts without changing the cap (101.082175ms)
+✔ notification amounts use one fixed decimal without rounding ledger cents (96.7105ms)
+[bank-api] 提交内容必须是 JSON 对象
+[bank-api] 提交内容必须是 JSON 对象
+[bank-api] 提交内容必须是 JSON 对象
+[bank-api] 提交内容必须是 JSON 对象
+[bank-api] 操作内容必须是 JSON 对象
+[bank-api] 操作内容必须是 JSON 对象
+[bank-api] 操作内容必须是 JSON 对象
+[bank-api] 提交内容过大
+[bank-api] 提交内容过大
+[bank-api] 请使用 JSON 格式提交
+✔ JSON boundaries reject null, arrays and non-object action payloads without touching the ledger (394.556035ms)
+✔ request size is bounded by UTF-8 bytes even without Content-Length (1.499556ms)
+✔ oversized request stream is cancelled before consuming the remainder (1.71328ms)
+✔ simple form content types and cross-scheme / cross-site mutation requests are rejected (75.722216ms)
+✔ a stale tab cannot mutate funds using the other account now in the shared cookie (81.269117ms)
+[bank-api] 尝试次数过多，请15分钟后再试
+✔ failed login counters persist; locked accounts cannot bypass the lock with a correct password (543.313596ms)
+✔ release: full money-movement history and replay protection survive more than 3,000 actions (652.098974ms)
+✔ release: idempotency keys bind action and payload, while object-key order and old keys stay compatible (1.581106ms)
+✔ release: quote metadata changing during lookup does not break a retried watchlist request (0.550498ms)
+✔ release: splitting a stock sale into fractional-cent trades cannot create extra cash (36.223847ms)
+✔ release: a sub-cent sell is cancelled without giving away shares or crediting a free cent (1.646259ms)
+✔ release: large fractional-share fills use exact integer arithmetic and release only their budget (1.387887ms)
+✔ release: invalid calendar dates and nonnumeric quote inputs are rejected without a quote (4.290968ms)
+✔ release: unfinished daily bars cannot become stale final prices on a later failed refresh (2.780453ms)
+✔ release: a parent PIN reset recovers a locked child account and revokes old sessions (2472.21303ms)
+✔ release: password changes retain setup length limits and clear the recovered parent lock (1087.140769ms)
+✔ malformed or non-existent calendar days cannot become closing-price dates (4.226126ms)
+✔ official holiday and half-day boundaries keep HK and US order targets intact (36.580155ms)
+✔ database initialization failure closes its pool and the next request reconnects without leaking details (227.3992ms)
+✔ every ledger write transaction applies its lock and statement timeouts before locking the row (162.041288ms)
+✔ an idle database disconnect is handled and the existing pool remains usable (140.186883ms)
+✔ failed business operations roll back; a rollback failure destroys the client and preserves the original error (143.046276ms)
+✔ an ambiguous COMMIT never replays automatically; an explicit same-key retry does not credit twice (139.043999ms)
+✔ idle polling shows new, repriced and paused tasks even without a balance or notification change (190.518296ms)
+✔ idle polling refreshes unheld watchlist quotes and fixed rates without changing the balance (107.524417ms)
+✔ background refresh protects a focused input before the first keystroke and while the read is in flight (90.325333ms)
+✔ a timed-out financial submit releases the busy UI and retries the same key without a second credit (92.426444ms)
+✔ an unconfirmed mutation survives same-tab reload using a payload-free fingerprint; acknowledged repeats get new keys (95.499588ms)
+✔ credential actions are never persisted, and explicit logout removes outstanding recovery keys (88.913807ms)
+✔ shared-cookie account switches return to login without applying another role or losing role-scoped recovery keys (82.351038ms)
+✔ a role-change rejection during a mutation returns to login and retains the unconfirmed request key (87.987459ms)
+✔ the server reads the project .env (port, setup token, ledger path) from any working directory (669.288086ms)
+✔ real environment variables take precedence over .env (423.95283ms)
+✔ npm scripts no longer depend on a Node.js 22.9-only flag (12.128032ms)
+✔ Yahoo fetching stops at the time budget instead of running past the 30 s function limit (1502.496361ms)
+✔ symbols with pending orders are fetched before holdings, watchlist and defaults (221.869171ms)
+✔ settlement order: batched daily bars preserve chronological cost and profit (147.586425ms)
+✔ settlement order: batched daily bars in reverse row order preserve chronological cost and profit (101.387041ms)
+✔ settlement order: timely daily history gives the same result as a delayed batch (122.654042ms)
+✔ settlement order: a later quote cannot cross an older missing quote, and both fill when the gap arrives (112.333753ms)
+✔ settlement order: same-day sell first (119.489054ms)
+✔ settlement order: same-day sell first at the same millisecond survives reload (112.772155ms)
+✔ settlement order: same-day buy first (103.485249ms)
+✔ settlement order: same-day buy first at the same millisecond survives reload (101.742261ms)
+✔ settlement order: one stock missing its earlier close does not block another stock (91.3167ms)
+✔ settlement order: no same-day order fills during the closing-price safety window (87.430323ms)
+✔ settlement order: a cancelled earlier order is excluded from the stock queue (87.68285ms)
+✔ settlement order: cancelling a waiting later buy clears its reason and releases only its reservation (95.635825ms)
+✔ settlement order: a legitimate retarget before any conflicting fill reorders all pending trades (106.298813ms)
+✔ settlement order: retarget cannot backdate a rolled trade behind a completed trade (114.88608ms)
+✔ settlement order: retarget cannot backdate a rolled trade behind a completed trade with an identical submission timestamp (91.936618ms)
+✔ settlement order: pre-upgrade late fills pause the old gap and same-stock successors without rewriting money (89.659104ms)
+✔ settlement order: an unsafe roll is rejected and the actual fill date takes priority over a legacy target (89.955332ms)
+✔ settlement order: a safe roll clears a legacy history block and settles using an available final close (88.862459ms)
+✔ settlement order: normalize every holiday target before sorting a shared half-day session (87.525168ms)
+✔ settlement order: quote refresh and original request retries cannot repeat completed fills (117.664054ms)
+[bank-api] 可用余额不足，购物申请不能超过可用金额
+[bank-api] 可用余额不足，购物申请不能超过可用金额
+✔ API serializes concurrent shopping requests and rolls back the rejected request completely (323.40589ms)
+[bank-api] 可用余额不足，购物申请不能超过可用金额
+✔ stock and shopping API calls contend for the same available funds inside the transaction (263.08944ms)
+✔ concurrent requests at the exact combined budget succeed and approval uses its own hold (259.794635ms)
+[bank-api] 这个心愿已有购物申请，请到购买记录查看
+✔ two simultaneous wish purchases with different keys create only one persistent linked request (299.086646ms)
+[bank-api] 请输入正确金额（最多两位小数）
+[bank-api] 金额必须大于零
+[bank-api] 请输入正确金额（最多两位小数）
+[bank-api] 请输入正确金额（最多两位小数）
+[bank-api] 请输入正确金额（最多两位小数）
+[bank-api] 请输入正确金额（最多两位小数）
+[bank-api] 心愿不存在
+[bank-api] 可用余额不足
+✔ deleting a wish cannot release its pending shopping hold; malformed amounts do not persist (302.073006ms)
+[bank-api] 只有家长可以执行此操作
+✔ stock search is private and Yahoo fuzzy search + 10-watchlist change are live through API (301.55751ms)
+✔ RGG-003: successful registration selects the requested security before any buy can be submitted (287.158364ms)
+✔ RGG-003: failed state read keeps NVDA and manual refresh restores only NVDA (148.099621ms)
+✔ RGG-003: failed state read keeps NVDA and visibility refresh restores only NVDA (131.231577ms)
+✔ RGG-003: failed state read keeps NVDA and interval refresh restores only NVDA (148.570753ms)
+✔ RGG-003: failed state read keeps NVDA and same buy button restores only NVDA (140.992602ms)
+✔ RGG-003: a stale buy submit during recovery only refreshes, and repeated read failures keep the form blocked (132.493444ms)
+✔ RGG-003: rejected nontradable registration is shown and cannot expose or submit another stock (132.141293ms)
+✔ RGG-003: an explicit newer choice wins over an in-flight refresh of the old target (138.770574ms)
+✔ RGG-003: choosing a different new ticker does not revive the old target or auto-register the new one (138.193272ms)
+✔ RGG-003: an explicit dropdown change survives the old selection recovery (135.868529ms)
+✔ RGG-003: logout discards the previous account's pending stock selection (133.214478ms)
+✔ RGG-003: expired session discards the previous account's pending stock selection (138.625342ms)
+✔ RGG-003: role switch discards the previous account's pending stock selection (141.952343ms)
+✔ RGG-003: bootstrap role switch discards the previous account's pending stock selection (132.06445ms)
+✔ RGG-001: both child and parent pending order cards show an escaped reconciliation reason (183.923322ms)
+✔ a genuinely missing local file still creates an uninitialized bank (15.190228ms)
+✔ two transient incomplete JSON reads recover from a complete third snapshot (113.220979ms)
+✔ persistent invalid JSON is never reset, partially repaired or passed to a financial mutation (119.532735ms)
+✔ a ledger disappearing after a malformed read is not treated as a fresh bank (30.153019ms)
+✔ a refresh waits for a previously queued local transaction to commit (9.985534ms)
+✔ concurrent local reads and writes return complete snapshots without losing serialized updates (159.589166ms)
+✔ failed atomic rename leaves the prior ledger unchanged and removes its unique temporary file (5.71035ms)
+✔ pay off all succeeds after a transient bad read and a same-key retry never debits twice (85.175729ms)
+✔ persistent local read failure returns a controlled JSON API error without leaking parser details (110.147668ms)
+✔ Dad adds fold-shirt task, Olivia logs 5, Dad acceptance credits O$10 exactly once (44.000756ms)
+✔ Olivia can propose task and rate, Dad can approve proposal without immediately paying (1.505021ms)
+✔ Dad edits reward and pauses tasks; old submissions lock their earlier rate (3.899303ms)
+✔ Rejected task completion / rejected proposed task never credits cash (1.879295ms)
+✔ Kid cannot create/update/pay tasks; all rewards must use O$0.1 increments; quantity integers (1.934035ms)
+✔ Legacy V1.4 accounts without tasks arrays remain valid; tasks initialize on first modification (1.718981ms)
+✔ Task UI has real forms and dad management; all currency values display with one decimal (96.270807ms)
+✔ fixed deposits and loans use the Hong Kong calendar day, including 00:00–08:00 HKT (165.058187ms)
+✔ a deposit opened at 07:30 in Hong Kong is listed under 今日 with that day as its start (126.271292ms)
+✔ the displayed amount due includes interest through today and equals what pay-off-all deducts (149.835655ms)
+✔ parent decisions notify Olivia with 家长 wording; no 爸爸 remains in page or server text (127.941013ms)
+✔ settings reject blank or non-numeric rates instead of silently saving 0% (124.685051ms)
+✔ wish progress never shows 100% or "还差 O$ 0.0" before the goal is actually reached (396.251362ms)
+✔ the loan form never states a larger remaining allowance than the server accepts (139.131866ms)
+✔ the task price editor uses the same O$0.1 step that the server enforces (142.646017ms)
+✔ special-closure roll is offered only after the order's own exchange date has passed (135.089128ms)
+✔ API: Secure session cookie behind an HTTPS proxy; an opaque Origin is a 403, not a parser error (360.204846ms)
+✔ task completion quantity is a whole-number stepper (server only accepts integers) (335.039086ms)
+✔ return controls are Olivia-only; dad refunds from his own page (244.794058ms)
+✔ search results outside HK/US are watch-only (no dead "trade" button) (169.825592ms)
+✔ empty account renders a neutral ring, and debt is listed but never drawn as an asset slice (307.242827ms)
+✔ early-redeemed deposit shows no interest; active deposit shows its estimate (118.944009ms)
+✔ pending orders can be cancelled, active loans offer exact pay-off, exceptional closures can roll (235.016651ms)
+✔ timestamps show the viewer local date (HK), not the UTC date (180.170509ms)
+✔ a second submit while busy is still prevented (no native GET that would put the PIN in the URL) (128.883692ms)
+✔ a revoked session (PIN / password changed) returns to the login screen (128.721093ms)
+✔ hash routes restore the page and sub-tab on reload (139.718579ms)
+✔ local server CSP allows blob: images, so avatar upload works locally (275.726026ms)
+✔ bank wording, goose parent avatar and fixed one-decimal amounts preserve real fractions (271.258064ms)
+✔ shopping shows eligible deadline, expired or used refund attempt, and no cancellation (113.895675ms)
+✔ parent settings default to 500, remaining allowance subtracts pending requests, and zero disables borrowing (105.589952ms)
+✔ parent receives a new refund in the idle poll without reloading or losing an edited form (102.089638ms)
+✔ a confirmed payoff followed by failed refresh remains successful; next click only reloads state (93.290523ms)
+✔ uncertain POST response reuses its idempotency key on manual retry without repeating repayment (155.967609ms)
+✔ submitting another form while a confirmed operation awaits refresh preserves its draft and does not claim submission (87.281039ms)
+✔ V1.3 hides redundant wallet card and legacy deposit request records (2.624798ms)
+✔ V1.3 retains current balances and all functional pages (0.57263ms)
+✔ screenshot case: one-character wish offers one-click purchase and keeps progress after funds are reserved (201.82487ms)
+✔ unfunded wishes cannot be applied for; parent cannot submit from a wish; rejected and refunded wishes can retry (170.635383ms)
+✔ shopping and stock forms show and enforce the same remaining cash after both kinds of hold (218.741992ms)
+✔ wish cards paginate, filter by actual progress, and escape user names (118.122752ms)
+✔ unavailable Yahoo triggers labelled offline catalogue instead of raw `fetch failed` (8.629361ms)
+✔ Yahoo online results still remain the primary full-universe source (9.862419ms)
+✔ kid and dad pages show one-step purchase / separate optional return, with no delivery-only button (339.391893ms)
+ℹ tests 246
+ℹ suites 0
+ℹ pass 245
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 7000.309825
