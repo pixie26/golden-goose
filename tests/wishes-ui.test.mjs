@@ -26,7 +26,7 @@ test('screenshot case: one-character wish offers one-click purchase and keeps pr
  let m=await mount(s),html=m.html();
  assert.match(html,/class="wish-name">鞋<\/b>/);
  assert.match(html,/data-act="wish.purchase"/);
- assert.match(html,/一键申请购买/);
+ assert.match(html,/<\/svg>申请购买<\/button>/);
  assert.match(m.html("tab='home';render()"),/data-act="wish.purchase"/);
  act(s,'wish.purchase',{id:wish.id});
  assert.equal(view(s,'kid').summary.availableCents,3900);

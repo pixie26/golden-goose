@@ -20,12 +20,12 @@ test('actual home HTML shows investment summary, exact holdings, quote dates and
  s.profile.kidAvatarData=fixture;
  const html=await htmlFor(s);
  assert.match(html,/我的投资速览/);
- assert.match(html,/股票总市值/);
+ assert.match(html,/股票市值/);
  assert.match(html,/O\$ 1,400\.0(?![\d.])/,'AAPL marked at O$1200, HK shares without quote at cost O$200');
- assert.match(html,/未实现盈亏/);
+ assert.match(html,/目前盈亏/);
  assert.match(html,/\+O\$ 200\.0(?![\d.])/,'only AAPL has a valid unrealized gain');
  assert.match(html,/收盘价日期 2026-11-16/);
- assert.match(html,/1 只持仓暂缺有效收盘价/);
+ assert.match(html,/1 只股票还没有收盘价/);
  assert.match(html,/Olivia 的头像/);
  assert.match(html,/id="kid-avatar-file"/);
  assert.match(html,/data-act="profile.avatar.remove"/);

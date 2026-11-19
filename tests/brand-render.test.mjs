@@ -58,7 +58,7 @@ test('V1.9 home displays the existing watchlist with price, market, date, 1D/1W/
  assert.match(html,/\+40\.0%/);
  assert.match(html,/管理自选 · 2\/10/);
  assert.match(html,/data-tab="stocks"/);
- assert.match(html,/行情可能延迟/);
+ assert.match(html,/最近一个交易日的收盘价/);
  // Homepage watchlist must be the final dashboard section, after investment.
  assert.ok(html.indexOf('我的自选股票') > html.indexOf('我的投资速览'));
  assert.ok(html.indexOf('我的自选股票') > html.indexOf('最近的交易'));

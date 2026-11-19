@@ -178,9 +178,10 @@ test('pages: a rolled order explains itself; overdue orders offer cancel (not ro
  at('2028-04-06T02:00:00Z',()=>act(s,'kid','stock.buy',{symbol:'2800.HK',amount:'100'}));
  const kid=await mount(s,'kid','2028-04-07T04:00:00Z');
  const orders=kid("ordersCard()");
- assert.match(orders,/目标交易日 2028-04-05<\/span>[^<]*<span class="nw">预留 O\$ 300\.0<\/span><br>原定 2028-04-04 休市或无收盘价，已顺延<br>/,'the roll note is its own wrapping line');
+ assert.match(orders,/成交日 2028-04-05<\/span>[^<]*<span class="nw">预留 O\$ 300\.0<\/span><br>原定 2028-04-04 休市或无收盘价，已顺延<br>/,'the roll note is its own wrapping line');
  assert.match(orders,/2028-04-05 收盘价/);
- assert.match(kid("tab='stocks';render();document.getElementById('root').innerHTML"),/遇到临时休市或停牌，顺延到之后第一个收盘价/);
+ // The buy form states the basic rule; a roll is explained on the order itself (above).
+ assert.match(kid("tab='stocks';render();document.getElementById('root').innerHTML"),/收盘前下单按当天收盘价成交，收盘后下单按下一个交易日的收盘价/);
  const dad=await mount(s,'dad','2028-04-07T04:00:00Z');
  const page=dad('parentStocks()');
  assert.doesNotMatch(page,/data-act="order\.roll"/);

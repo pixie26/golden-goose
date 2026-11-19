@@ -94,7 +94,7 @@ test('a matured deposit uses the bank date, confirms principal plus interest, an
  const m=await mount(s,{role:'kid',DateClass:frozenDate('2000-01-01T00:00:00Z')});
  const html=m.run('fixedPanel()');
  assert.match(html,/已到期，待入账/);assert.match(html,/到期利息/);assert.match(html,/>到期取回<\/button>/);
- assert.doesNotMatch(html,/>提前赎回<\/button>/);
+ assert.doesNotMatch(html,/>提前取出<\/button>/);
  await m.click('data-act','fixed.redeem',f.id);
  assert.match(m.confirmations[0],/已到期.*本金和利息/);assert.doesNotMatch(m.confirmations[0],/没有利息/);
  assert.equal(f.status,'matured');assert.ok(f.interestCents>0);
@@ -106,9 +106,9 @@ test('a deposit before its bank maturity date retains the early-redemption warni
  const s=bank();act(s,'cash.grant',{amount:'100'},'dad');act(s,'fixed.open',{amount:'100',term:'3'});
  const f=s.fixed[0],m=await mount(s,{role:'kid',DateClass:frozenDate('2099-01-01T00:00:00Z')});
  const html=m.run('fixedPanel()');
- assert.match(html,/预计利息/);assert.match(html,/>提前赎回<\/button>/);assert.doesNotMatch(html,/>到期取回<\/button>/);
+ assert.match(html,/预计利息/);assert.match(html,/>提前取出<\/button>/);assert.doesNotMatch(html,/>到期取回<\/button>/);
  await m.click('data-act','fixed.redeem',f.id);
- assert.match(m.confirmations[0],/提前赎回只退本金，没有利息/);
+ assert.match(m.confirmations[0],/提前取出只拿回本金，没有利息/);
  assert.equal(f.status,'early');assert.equal(f.interestCents,0);assert.equal(s.cashCents,10000);
  assert.doesNotMatch(m.toast.textContent,/已到期|本金和利息/);
 });

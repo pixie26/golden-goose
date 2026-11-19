@@ -39,10 +39,11 @@ test('bank wording, goose parent avatar and fixed one-decimal amounts preserve r
  assert.equal(m.run('signedMoney(-1)'),'O$ 0.0');
  assert.equal(m.run('priceText(162000)'),'162.0');assert.equal(m.run('priceText(125)'),'0.1');
  assert.equal(m.run("moneyInText('O$ 20, next; O$ 1,234.56.')"),'O$ 20.0, next; O$ 1,234.6.');
- kid.run("data.notifications=[{id:'legacy-note',title:'旧退款通知',detail:'已退款 O$ 20',tone:'ok',at:'2026-11-18T00:00:00Z',readAt:null,target:'account'}];data.ledger=[{id:'legacy-ledger',type:'loan.repay',description:'偿还家长借款（利息 O$0）',deltaCents:0,cashAfterCents:0,at:'2026-11-18T00:00:00Z'}]");
+ kid.run("data.notifications=[{id:'legacy-note',title:'旧退款通知',detail:'已退款 O$ 20',tone:'ok',at:'2026-11-18T00:00:00Z',readAt:null,target:'account'}];data.ledger=[{id:'legacy-ledger',type:'loan.repay',description:'偿还家长借款（利息 O$0）',deltaCents:0,cashAfterCents:0,at:'2026-11-18T00:00:00Z'},{id:'legacy-ledger-2',type:'loan.repay',description:'偿还家长借款（利息 O$1.25）',deltaCents:0,cashAfterCents:0,at:'2026-11-17T00:00:00Z'}]");
  assert.match(kid.run('notificationsMenu()'),/已退款 O\$ 20\.0/);assert.equal(kid.run('data.notifications[0].detail'),'已退款 O$ 20');
  kid.run("recordState('ledger').period='all'"); // This test verifies historical currency formatting, independent of today's default date range.
- assert.match(kid.run('history()'),/偿还家长借款（利息 O\$ 0\.0）/);assert.equal(kid.run('data.ledger[0].description'),'偿还家长借款（利息 O$0）');
+ assert.match(kid.run('history()'),/偿还家长借款（利息 O\$ 1\.3）/);// old one-decimal-less amounts are formatted
+ assert.match(kid.run('history()'),/偿还家长借款<\/b>/);assert.doesNotMatch(kid.run('history()'),/利息 O\$ 0\.0/,'a zero interest note is dropped');assert.equal(kid.run('data.ledger[0].description'),'偿还家长借款（利息 O$0）');
  assert.equal(s.cashCents,0,'formatting never changes ledger cents');
 });
 
@@ -57,7 +58,7 @@ test('shopping shows eligible deadline, expired or used refund attempt, and no c
  assert.match(html,new RegExp(`name="id" value="${eligible.id}"`));
  assert.match(html,/退款申请截止/);assert.match(html,/超过.*7.*天|7.*天.*期限/);
  assert.match(html,/退款申请未通过；每笔订单只能申请一次/);
- assert.match(html,/退款申请已提交，等待家长处理/);
+ assert.match(html,/<span class="badge [^"]*">退款待处理<\/span>/,'a pending refund is shown by its status badge');
  assert.doesNotMatch(html,/data-act="purchase.return.cancel"|data-act="purchase.refund"/);
  const parent=await mount(s,'dad'),parentHtml=parent.html("tab='parent';render()");
  assert.equal((parentHtml.match(/data-act="purchase.refund"/g)||[]).length,1,'only the pending child request can be approved');

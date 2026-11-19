@@ -55,6 +55,8 @@ const owedCents=n=>Math.ceil(Math.max(0,Number(n)||0)/10)*10;
 const money=n=>'O$ '+displayAmount(n).toLocaleString('en-HK',{minimumFractionDigits:1,maximumFractionDigits:1});
 const signedMoney=n=>{const shown=displayAmount(n);return (shown<0?'−':shown>0?'+':'')+money(Math.abs(n));};
 // Normalize currency fragments in old notification/ledger text for display only.
+// Plainer wording for ledger lines, including ones saved by earlier versions.
+const ledgerText=l=>moneyInText(String(l.description??'').replace('（本金为负债）','').replace(/^确认购买并交付：/,'购买：').replace(/^提前赎回/,'提前取出')).replace('（利息 O$ 0.0）','');
 const moneyInText=text=>String(text??'').replace(/O\$\s*([+-]?\d+(?:,\d{3})*(?:\.\d+)?)/g,(_,amount)=>{const formatted=money(Number(amount.replace(/,/g,''))*100);return amount.startsWith('+')?formatted.replace('O$ ','O$ +'):formatted;});
 const pct=bps=>(Number(bps||0)/100).toLocaleString('en-HK',{maximumFractionDigits:2})+'%';
 const pad=n=>String(n).padStart(2,'0');
@@ -157,7 +159,7 @@ function spendingField(label){
  const available=Math.max(0,Number(data.summary.availableCents)||0);
  // These forms accept tenths: never round a spending cap upward past usable cash.
  const displayCap=spendableCents(available);
- return `${moneyField('amount',label,`required max="${(available/100).toFixed(2)}" data-budget-amount`)}<p class="budget-note"><span>本次最多</span><b class="num">${money(displayCap)}</b><small>已扣除待处理购物和股票买单的预留金额</small></p>`;
+ return `${moneyField('amount',label,`required max="${(available/100).toFixed(2)}" data-budget-amount`)}<p class="budget-note"><span>本次最多</span><b class="num">${money(displayCap)}</b></p>`;
 }
 const textArea=(name,label,ph='可选')=>`<label class="field"><span>${label}</span><textarea name="${esc(name)}" maxlength="240" placeholder="${esc(ph)}"></textarea></label>`;
 const hiddenInput=(name,value)=>`<input type="hidden" name="${esc(name)}" value="${esc(value)}">`;
@@ -246,7 +248,7 @@ const meta=(...parts)=>parts.filter(Boolean).map(x=>`<span class="nw">${x}</span
 
 const STATUS={
  purchase:{pending:['等待家长确认','pending'],approved:['已购买','ok'],delivered:['已购买','ok'],return_pending:['退款待处理','pending'],rejected:['未通过','no'],refunded:['已退款','info']},
- fixed:{active:['存款中','live'],matured:['已到期','ok'],early:['已提前赎回','info']},
+ fixed:{active:['存款中','live'],matured:['已到期','ok'],early:['已提前取出','info']},
  loan:{pending:['等待家长批准','pending'],active:['待还清','live'],repaid:['已还清','ok'],rejected:['未通过','no']},
  order:{pending:['待成交','pending'],filled:['已成交','ok'],cancelled:['已取消','info']},
  proposal:{pending:['等待家长批准','pending'],approved:['已加入任务清单','ok'],rejected:['未通过','no']},
@@ -305,7 +307,7 @@ function recordsContent(key,items,row,options={}){
  const toolbar=options.filters===false?'':`<div class="record-toolbar">${filters}<span class="record-count" aria-live="polite">${page.total===page.allCount?'共 '+page.total+' 条':'筛选 '+page.total+' / '+page.allCount+' 条'}</span></div>`;
  const timeHint=page.hiddenByTime?`<div class="record-time-hint"><span>有 ${page.hiddenByTime} 条记录未显示；较早和未标日期的记录可在全部时间查看。</span><button type="button" class="btn btn-sm btn-soft" data-record-key="${esc(key)}" data-record-all-time>查看全部时间</button></div>`:'';
  const rows=page.items.map(row).join(''),body=rows?(options.wrap?options.wrap(rows):`<ul class="${esc(options.listClass||'list')}">${rows}</ul>`):empty(page.allCount?(page.hiddenByTime?'当前时间范围内没有记录':'没有符合筛选条件的记录'):esc(options.empty||'还没有记录'));
- const nav=page.total?`<nav class="record-pagination" aria-label="${esc(label+'分页')}"><span>${page.from}–${page.to} / ${page.total} 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="${esc(key)}" data-record-page="${s.page-1}"${s.page===1?' disabled':''} aria-label="${esc(label+'上一页')}">上一页</button><span class="record-page-number" aria-live="polite">${s.page} / ${page.pages}</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="${esc(key)}" data-record-page="${s.page+1}"${s.page===page.pages?' disabled':''} aria-label="${esc(label+'下一页')}">下一页</button></div></nav>`:'';
+ const nav=page.pages>1?`<nav class="record-pagination" aria-label="${esc(label+'分页')}"><span>${page.from}–${page.to} / ${page.total} 条<span class="record-page-size"> · 每页 10 条</span></span><div><button type="button" class="btn btn-sm btn-ghost" data-record-key="${esc(key)}" data-record-page="${s.page-1}"${s.page===1?' disabled':''} aria-label="${esc(label+'上一页')}">上一页</button><span class="record-page-number" aria-live="polite">${s.page} / ${page.pages}</span><button type="button" class="btn btn-sm btn-ghost" data-record-key="${esc(key)}" data-record-page="${s.page+1}"${s.page===page.pages?' disabled':''} aria-label="${esc(label+'下一页')}">下一页</button></div></nav>`:'';
  return toolbar+timeHint+body+nav;
 }
 function recordsList(key,items,row,options={}){
@@ -580,7 +582,7 @@ function wishState(w){
  const ready=data.summary.availableCents>=w.goalCents;
  // A shortfall is rounded UP to O$0.1: a few cents short must never read "还差 O$ 0.0".
  const short=Math.ceil(Math.max(0,w.goalCents-data.summary.availableCents)/10)*10;
- return {key:ready?'ready':'saving',label:ready?'可以购买':'攒钱中',tone:ready?'ok':'live',description:ready?'钱够啦，可以申请购买！':'还差 '+money(short),previous:linked[0]};
+ return {key:ready?'ready':'saving',label:ready?'可以购买':'攒钱中',tone:ready?'ok':'live',description:ready?'钱够啦！':'还差 '+money(short),previous:linked[0]};
 }
 function wishProgress(w){
  const state=wishState(w),avail=data.summary.availableCents;
@@ -593,7 +595,7 @@ function wishAction(w,state=wishState(w)){
  if(state.purchase)return `<div class="wish-actions"><button type="button" class="btn btn-sm btn-soft" data-purchase-record="${esc(state.purchase.id)}">查看购买记录${icon('chevRight')}</button></div>`;
  if(role!=='kid')return '';
  const retry=state.previous?.status==='rejected'?'上次申请未通过，可以重新申请':state.previous?.status==='refunded'?'上次购买已退款，可以重新申请':'';
- return `<div class="wish-actions">${state.key==='ready'?btn('wish.purchase',`${icon('bag')}一键申请购买`,w.id,'primary'):'<button type="button" class="btn btn-sm btn-ghost" disabled>攒够后申请购买</button>'}${retry?`<small>${retry}</small>`:''}</div>`;
+ return `<div class="wish-actions">${state.key==='ready'?btn('wish.purchase',`${icon('bag')}申请购买`,w.id,'primary'):'<button type="button" class="btn btn-sm btn-ghost" disabled>攒够后申请购买</button>'}${retry?`<small>${retry}</small>`:''}</div>`;
 }
 function openPurchaseRecord(id){
  const ordered=(data.purchaseRequests||[]).slice().sort((a,b)=>recordTime(recordDate(b))-recordTime(recordDate(a)));
@@ -608,7 +610,7 @@ function wishCard(){
  return card('我的心愿目标','target',body,{right:more('wishes')});
 }
 function recentCard(){
- const rows=data.ledger.slice(0,3).map(l=>`<li class="row">${ledgerIcon(l.type)}<div class="row-main"><b>${esc(moneyInText(l.description))}</b><small>${friendlyDay(l.at)}</small></div><b class="num ${l.deltaCents>=0?'pos':'neg'}">${signedMoney(l.deltaCents)}</b></li>`).join('');
+ const rows=data.ledger.slice(0,3).map(l=>`<li class="row">${ledgerIcon(l.type)}<div class="row-main"><b>${esc(ledgerText(l))}</b><small>${friendlyDay(l.at)}</small></div><b class="num ${l.deltaCents>=0?'pos':'neg'}">${signedMoney(l.deltaCents)}</b></li>`).join('');
  return card('最近的交易','clock',rows?list(rows):empty('还没有交易'),{right:`<button type="button" class="more" data-tab="history">全部${icon('chevRight')}</button>`});
 }
 function investmentSnapshot(){
@@ -617,9 +619,9 @@ function investmentSnapshot(){
  const missing=holdings.filter(p=>!p.quote).length;
  const pending=data.orders.filter(o=>o.status==='pending').length;
  const name=p=>data.symbols.find(s=>s.symbol===p.symbol)?.name||p.symbol;
- const stats=`<div class="mini-stats"><div><span>股票总市值</span><b class="num">${money(data.summary.stocksValueCents)}</b></div><div><span>未实现盈亏</span><b class="num ${pnl>=0?'pos':'neg'}">${signedMoney(pnl)}</b></div><div><span>持仓数量</span><b class="num">${holdings.length} 只</b></div><div><span>待结算订单</span><b class="num">${pending} 笔</b></div></div>`;
- const rows=holdings.length?`<div class="holdings">${holdings.slice(0,3).map(p=>{const f=positionFigures(p);return `<div class="holding"><div class="holding-main"><b>${esc(p.symbol)}</b><span>${esc(name(p))}</span><small class="holding-prices">买入价 <b class="num">${priceWithCurrency(f.buyMilli,f.currency)}</b> · 收盘价 <b class="num">${priceWithCurrency(f.closeMilli,f.currency)}</b></small><small>${p.quote?`收盘价日期 ${esc(p.quote.date)}`:'暂缺收盘价 · 按成本估值'}</small></div><div class="holding-side"><b class="num">${money(p.valueCents)}</b>${gainLines(f)}</div></div>`;}).join('')}</div>`:'<p class="hint invest-empty">还没有股票持仓</p>';
- const warn=missing?`<p class="hint warn-text">${missing} 只持仓暂缺有效收盘价，按成本估值，不计入盈亏。</p>`:'';
+ const stats=`<div class="mini-stats"><div><span>股票市值</span><b class="num">${money(data.summary.stocksValueCents)}</b></div><div><span>目前盈亏</span><b class="num ${pnl>=0?'pos':'neg'}">${signedMoney(pnl)}</b></div><div><span>持仓数量</span><b class="num">${holdings.length} 只</b></div><div><span>待成交</span><b class="num">${pending} 笔</b></div></div>`;
+ const rows=holdings.length?`<div class="holdings">${holdings.slice(0,3).map(p=>{const f=positionFigures(p);return `<div class="holding"><div class="holding-main"><b>${esc(p.symbol)}</b><span>${esc(name(p))}</span><small class="holding-prices">买入价 <b class="num">${priceWithCurrency(f.buyMilli,f.currency)}</b> · 收盘价 <b class="num">${priceWithCurrency(f.closeMilli,f.currency)}</b></small><small>${p.quote?`收盘价日期 ${esc(p.quote.date)}`:'还没有收盘价 · 先按买入金额计算'}</small></div><div class="holding-side"><b class="num">${money(p.valueCents)}</b>${gainLines(f)}</div></div>`;}).join('')}</div>`:'<p class="hint invest-empty">还没有股票持仓</p>';
+ const warn=missing?`<p class="hint warn-text">${missing} 只股票还没有收盘价，先按买入金额计算，不算盈亏。</p>`:'';
  return card('我的投资速览','trend',stats+rows+warn,{right:more('stocks','查看投资'),cls:'invest'});
 }
 
@@ -632,7 +634,7 @@ function homeWatchlist(){
   return `<article class="home-stock-tile"><div class="home-stock-head"><div class="home-stock-symbol"><span class="stock-spark">${icon('star')}</span><div><b>${esc(s.symbol)}</b><small title="${esc(s.name||'')}">${esc(s.name||s.symbol)}</small></div></div><span class="stock-market">${esc(s.market||'')}</span></div><div class="home-stock-price"><b class="num">${quoteText(s)}</b><span>${quote?.date?'收盘 '+esc(quote.date):'暂无可用收盘价'}</span></div><div class="home-stock-returns"><div><small>1D</small>${percentage(s.performance?.day)}</div><div><small>1W</small>${percentage(s.performance?.week)}</div><div><small>YTD</small>${percentage(s.performance?.ytd)}</div></div></article>`;
  }).join('');
  const body=stocks.length
-  ?`<div class="home-stock-grid">${tiles}</div><p class="home-stock-note">价格为最近可用收盘价，涨跌幅仅反映价格变动（不含股息）；行情可能延迟。</p>`
+  ?`<div class="home-stock-grid">${tiles}</div><p class="home-stock-note">价格是最近一个交易日的收盘价，涨跌只算股价变化。</p>`
   :`<div class="home-stock-empty"><span class="home-stock-empty-icon">${icon('star')}</span><div><b>还没有关注的股票</b><small>在投资页搜索股票并加入自选，就会显示在这里（最多 10 只）。</small></div><button type="button" class="btn btn-sm btn-soft" data-tab="stocks">去添加自选</button></div>`;
  return card('我的自选股票','star',body,{right:more('stocks',stocks.length?`管理自选 · ${stocks.length}/10`:'查看投资'),cls:'home-watch-card'});
 }
@@ -641,8 +643,8 @@ function homeWatchlist(){
 function account(){
  const s=data.summary,debt=s.loanPrincipalCents+s.loanInterestCents;
  return `${pageHead('我的账户','piggy')}
- <div class="stats">${stat('活期现金',money(s.cashCents))}${stat('预留资金',money(s.reservedCents))}${stat('定期本金',money(s.fixedPrincipalCents))}${stat('欠家长',money(debt),debt?'neg':'')}</div>
- ${s.reservedCents?`<p class="reservation-summary">已预留：购物 ${money(s.purchaseReservedCents||0)} · 股票买单 ${money(s.stockReservedCents??s.reservedCents)}。预留资金仍在账户内，暂不可再次使用。</p>`:''}
+ <div class="stats">${stat('活期现金',money(s.cashCents))}${stat('预留资金',money(s.reservedCents))}${stat('定期本金',money(s.fixedPrincipalCents))}${stat('欠家长',money(owedCents(debt)),debt?'neg':'')}</div>
+ ${s.reservedCents?`<p class="reservation-summary">购物 ${money(s.purchaseReservedCents||0)} · 股票买单 ${money(s.stockReservedCents??s.reservedCents)} 正在等待处理，这部分钱暂时不能用。</p>`:''}
  ${seg('account',[['fixed','定期存款'],['shopping','购物'],['loan','借款']])}
  <div class="panel" id="fixed" data-panel="account:fixed"${hid('account','fixed')}>${fixedPanel()}</div>
  <div class="panel" id="shopping" data-panel="account:shopping"${hid('account','shopping')}>${shoppingPanel()}</div>
@@ -654,13 +656,13 @@ function fixedPanel(){
  const rows=recordsList('fixed',data.fixed,f=>{
   const est=Math.round(f.principalCents*f.rateBps*(Date.parse(f.maturity)-Date.parse(f.start))/86400000/3650000);
   const matured=fixedAtMaturity(f),interest=f.status==='active'?`${matured?'到期利息':'预计利息'} ${money(est)}`:f.status==='matured'?`利息 ${money(f.interestCents)}`:'不计利息';
-  return `<li class="row"><div class="row-main"><b>${f.term}个月 · <span class="num">${money(f.principalCents)}</span></b><small>${meta(`${esc(f.start)} → ${esc(f.maturity)}`,`年息 ${pct(f.rateBps)}`)}</small></div><div class="row-side">${matured?'<span class="badge pending">已到期，待入账</span>':statusBadge('fixed',f.status)}<small class="num">${interest}</small></div>${f.status==='active'?`<div class="row-actions">${btn('fixed.redeem',matured?'到期取回':'提前赎回',f.id,matured?'soft':'danger')}</div>`:''}</li>`;
+  return `<li class="row"><div class="row-main"><b>${f.term}个月 · <span class="num">${money(f.principalCents)}</span></b><small>${meta(`${esc(f.start)} → ${esc(f.maturity)}`,`年息 ${pct(f.rateBps)}`)}</small></div><div class="row-side">${matured?'<span class="badge pending">已到期，待入账</span>':statusBadge('fixed',f.status)}<small class="num">${interest}</small></div>${f.status==='active'?`<div class="row-actions">${btn('fixed.redeem',matured?'到期取回':'提前取出',f.id,matured?'soft':'danger')}</div>`:''}</li>`;
  },{label:'我的定期',categories:recordStatusCategories('fixed'),empty:'还没有定期存款'});
  const terms=`<div class="choices" role="radiogroup" aria-label="存款期限">${[3,6,12].map((m,i)=>`<label class="choice"><input type="radio" name="term" value="${m}"${i===0?' checked':''}><span><b>${m}个月</b><em>${pct(rates[m])}</em><small>年利率</small></span></label>`).join('')}</div>`;
- return `<div class="cols">${card('开立定期','bank',opForm('fixed.open',`${terms}${spendingField('存入金额 O$')}`,'存入定期',{foot:'<p class="hint">提前赎回只退本金、不计利息；到期自动连本带息转回活期。</p>'}))}${card('我的定期','list',rows)}</div>`;
+ return `<div class="cols">${card('开立定期','bank',opForm('fixed.open',`${terms}${spendingField('存入金额 O$')}`,'存入定期',{foot:'<p class="hint">到期后本金和利息自动回到活期；提前取出只拿回本金，没有利息。</p>'}))}${card('我的定期','list',rows)}</div>`;
 }
 function purchaseReturnInfo(r){
- if(r.status==='return_pending')return '退款申请已提交，等待家长处理；提交后不能撤回';
+ if(r.status==='return_pending')return '';// the 退款待处理 badge says it
  if(r.status==='refunded')return '已退回活期账户';
  if(r.returnRejectedAt)return '退款申请未通过；每笔订单只能申请一次';
  if(r.returnCancelledAt)return '已使用本次退款申请机会，不能再次申请';
@@ -677,13 +679,15 @@ function shoppingPanel(){
   const info=[`<span class="nw">${date(r.at)}</span>`,r.status==='pending'&&r.reservedCents?'已预留 '+money(r.reservedCents):'',r.wishId?'来自心愿':'',r.note?esc(r.note):'',r.returnReason?'退款原因：'+esc(r.returnReason):'',esc(purchaseReturnInfo(r))].filter(Boolean).join(' · ');
   return `<li class="row"><div class="row-main"><b>${esc(r.name)}</b><small>${info}</small></div><div class="row-side"><b class="num">${money(r.approvedCents??r.amountCents)}</b>${statusBadge('purchase',r.status)}</div>${actions}</li>`;
  },{label:'我的购买',categories:[['pending','待购买'],['bought','已购买'],['return_pending','退款待处理'],['refunded','已退款'],['rejected','未通过']],category:x=>['approved','delivered'].includes(x.status)?'bought':x.status,empty:'还没有购买申请'});
- return `<div class="cols">${card('申请购买','bag',opForm('purchase.request',`${field('name','想买什么','text','required maxlength="90" placeholder="例如：鞋 / LEGO 城堡"')}${spendingField('价格 O$')}${field('link','商品链接','url','placeholder="可选 https://…"')}${textArea('note','为什么想买')}`,kid?'发给家长':'提交申请',{foot:'<p class="hint">提交后预留金额，家长确认购买时扣款；申请未通过会释放预留金额。</p>'}))}${card('我的购买','list','<p class="hint return-policy">购买完成后 7 天内可申请退款；每笔订单只有一次机会，提交后不能撤回，由家长同意或拒绝。</p>'+rows)}</div>`;
+ return `<div class="cols">${card('申请购买','bag',opForm('purchase.request',`${field('name','想买什么','text','required maxlength="90" placeholder="例如：鞋 / LEGO 城堡"')}${spendingField('价格 O$')}${field('link','商品链接','url','placeholder="可选 https://…"')}${textArea('note','为什么想买')}`,kid?'发给家长':'提交申请',{foot:'<p class="hint">提交后先把这笔钱留出来；家长买好才扣钱，不同意就把钱还给你。</p>'}))}${card('我的购买','list','<p class="hint return-policy">买到后 7 天内可以申请退款，每笔只能申请一次。</p>'+rows)}</div>`;
 }
 function loanPanel(){
  const limit=data.summary.loanLimitCents??data.settings.loanLimitCents??50000,pending=data.summary.loanPendingCents??data.loans.filter(l=>l.status==='pending').reduce((n,l)=>n+l.requestedCents,0),available=Math.max(0,data.summary.loanAvailableCents??(limit-data.summary.loanPrincipalCents-pending));
  const rows=recordsList('loans',data.loans,l=>{
   const interest=Math.round(l.interestMicroCents/1e6),due=l.principalCents+interest,active=l.status==='active';
-  const info=active?meta(`本金 ${money(l.principalCents)}`,`利息 ${money(interest)}`,`年息 ${pct(l.aprBps)}`):meta(date(l.createdAt),`年息 ${pct(l.aprBps)}`);
+  // Shown parts add up to the shown (rounded-up) due; principal is listed once it differs from the loan.
+  const shownInterest=owedCents(due)-Math.round(l.principalCents/10)*10;
+  const info=active?meta(l.principalCents!==l.requestedCents?`还剩本金 ${money(l.principalCents)}`:'',`利息 ${money(shownInterest)}`,`年息 ${pct(l.aprBps)}`):meta(date(l.createdAt),`年息 ${pct(l.aprBps)}`);
   const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.1" step="0.1" max="${(owedCents(due)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
   return `<li class="row"><div class="row-main"><b>借款 <span class="num">${money(l.requestedCents)}</span></b><small>${info}</small></div><div class="row-side">${active?`<b class="num neg">${money(owedCents(due))}</b>`:''}${statusBadge('loan',l.status)}</div>${repay}</li>`;
  },{label:'我的借款',categories:recordStatusCategories('loan'),empty:'暂无借款'});
@@ -709,7 +713,7 @@ function stocks(){
  const pnl=holdings.reduce((n,p)=>n+(p.quote?p.valueCents-p.costCents:0),0);
  const pending=data.orders.filter(o=>o.status==='pending').length;
  return `${pageHead('投资','trend')}
- <div class="stats">${stat('股票市值',money(data.summary.stocksValueCents))}${stat('未实现盈亏',signedMoney(pnl),pnl>=0?'pos':'neg')}${stat('持仓',holdings.length+' 只')}${stat('待成交',pending+' 笔')}</div>
+ <div class="stats">${stat('股票市值',money(data.summary.stocksValueCents))}${stat('目前盈亏',signedMoney(pnl),pnl>=0?'pos':'neg')}${stat('持仓',holdings.length+' 只')}${stat('待成交',pending+' 笔')}</div>
  <div class="cols cols-main"><div class="stack">${searchCard()}${watchCard()}</div><div class="stack">${buyCard(tradable)}</div></div>
  <div class="cols even">${holdingsCard(holdings)}${ordersCard()}</div>`;
 }
@@ -734,10 +738,10 @@ function watchCard(){
   const canBuy=s.tradable&&['HK','US'].includes(s.market);
   return `<div class="wl-row"><div class="wl-name"><b>${esc(s.symbol)}</b><small>${esc(s.name||'')}</small></div><div class="wl-price"><b class="num">${quoteText(s)}</b><small>${s.quote?esc(s.quote.date):'等待行情'}</small></div><div class="wl-perf">${perf(s.performance?.day,'1D')}${perf(s.performance?.week,'1W')}${perf(s.performance?.ytd,'YTD')}</div><div class="wl-act">${canBuy?`<button type="button" class="btn btn-sm btn-soft" data-buy-symbol="${esc(s.symbol)}">买入</button>`:''}<button type="button" class="icon-btn" data-watch-remove="${esc(s.symbol)}" aria-label="把 ${esc(s.symbol)} 移出自选">${icon('x')}</button></div></div>`;
  }).join('');
- const body=rows?`<div class="wl"><div class="wl-row wl-head"><span>股票</span><span class="wl-price">收盘价</span><span class="wl-perf"><span class="wl-p">1D</span><span class="wl-p">1W</span><span class="wl-p">YTD</span></span><span class="wl-act"></span></div>${rows}</div><p class="hint">收益截至所示收盘日；1D 比上一交易日，1W 比 5 个交易日前，YTD 比该收盘年份的上一年末；只算价格，不含股息。</p>`:empty('还没有自选股。搜索后点「自选」，最多 10 只。');
+ const body=rows?`<div class="wl"><div class="wl-row wl-head"><span>股票</span><span class="wl-price">收盘价</span><span class="wl-perf"><span class="wl-p">1D</span><span class="wl-p">1W</span><span class="wl-p">YTD</span></span><span class="wl-act"></span></div>${rows}</div><p class="hint">1D 比前一个交易日，1W 比一周前，YTD 比今年年初；只算股价变化。</p>`:empty('还没有自选股。搜索后点「自选」，最多 10 只。');
  return card('我的自选','star',body,{right:`<span class="badge info">${data.watchlist.length}/10</span>`});
 }
-const buyQuote=s=>s?.quote?`最新收盘 <b class="num">${quoteText(s)}</b> · ${esc(s.quote.date)}`:'暂无收盘价，成交按目标交易日收盘价';
+const buyQuote=s=>s?.quote?`最新收盘 <b class="num">${quoteText(s)}</b> · ${esc(s.quote.date)}`:'还没有收盘价，按成交日的收盘价成交';
 function buyCard(tradable){
  if(pendingBuySelection){
   const pending=pendingBuySelection,message=pending.error||`正在确认 ${pending.symbol} 的交易信息。账户更新后才能填写买入金额。`;
@@ -746,7 +750,7 @@ function buyCard(tradable){
  if(!tradable.length)return card('买入','cart',empty('先搜索港股或美股，点「买入」添加。'),{id:'buy'});
  const sel=tradable.find(s=>s.symbol===selectedSymbol);
  if(!sel)return card('买入','cart',empty('所选股票暂时无法交易，请重新搜索并选择。'),{id:'buy'});
- return card('买入','cart',opForm('stock.buy',`<label class="field"><span>股票</span><select name="symbol" id="buy-symbol">${tradable.map(x=>`<option value="${esc(x.symbol)}"${x.symbol===sel.symbol?' selected':''}>${esc(x.symbol)} · ${esc(x.name)}</option>`).join('')}</select></label><div class="quote-line" id="buy-quote">${buyQuote(sel)}</div>${spendingField('投入金额 O$')}`,'提交买入单',{foot:`<p class="hint">提交后预留金额，成交时扣款；撤单后释放预留金额。开盘前或盘中下单 → 当天收盘价成交；收盘后或休市 → 下一交易日收盘价；遇到临时休市或停牌，顺延到之后第一个收盘价。美股按 USD 1.0 = ${money((data.settings.usdToO||8)*100)}。</p>`}),{id:'buy'});
+ return card('买入','cart',opForm('stock.buy',`<label class="field"><span>股票</span><select name="symbol" id="buy-symbol">${tradable.map(x=>`<option value="${esc(x.symbol)}"${x.symbol===sel.symbol?' selected':''}>${esc(x.symbol)} · ${esc(x.name)}</option>`).join('')}</select></label><div class="quote-line" id="buy-quote">${buyQuote(sel)}</div>${spendingField('投入金额 O$')}`,'提交买入单',{foot:`<p class="hint">提交后先留出这笔钱，成交时才扣。收盘前下单按当天收盘价成交，收盘后下单按下一个交易日的收盘价。美股 USD 1.0 = ${money((data.settings.usdToO||8)*100)}。</p>`}),{id:'buy'});
 }
 function holdingsCard(holdings){
  const name=sym=>data.symbols.find(s=>s.symbol===sym)?.name||'';
@@ -754,7 +758,7 @@ function holdingsCard(holdings){
  const rows=recordsList('holdings',holdings,p=>{
   const avail=Math.max(0,p.qtyMicro-reservedSell(p.symbol)),f=positionFigures(p);
   const sell=avail>0?`<details class="inline row-actions"><summary class="btn btn-sm btn-ghost">卖出</summary>${opForm('stock.sell',`${hiddenInput('symbol',p.symbol)}<label class="field"><span>卖出股数（可卖 ${qtyText(avail)}）</span><input name="qty" type="number" inputmode="decimal" required step="0.000001" min="0.000001" max="${avail/1e6}"></label><button type="button" class="btn btn-sm btn-soft" data-fill="${avail/1e6}">全部</button>`,'提交卖出单',{cls:'form-inline'})}</details>`:'';
-  return `<li class="row"><div class="row-main"><b>${esc(p.symbol)} <span class="muted">${esc(name(p.symbol))}</span></b><small>${meta(`${qtyText(p.qtyMicro)} 股`,`成本 ${money(p.costCents)}`,`买入价 ${priceWithCurrency(f.buyMilli,f.currency)}`,p.quote?`收盘价 ${priceWithCurrency(f.closeMilli,f.currency)}（${esc(p.quote.date)}）`:'暂缺收盘价')}</small></div><div class="row-side"><b class="num">${money(p.valueCents)}</b>${f.gain===null?'':gainLines(f)}</div>${sell}</li>`;
+  return `<li class="row"><div class="row-main"><b>${esc(p.symbol)} <span class="muted">${esc(name(p.symbol))}</span></b><small>${meta(`${qtyText(p.qtyMicro)} 股`,`投入 ${money(p.costCents)}`,`买入价 ${priceWithCurrency(f.buyMilli,f.currency)}`,p.quote?`收盘价 ${priceWithCurrency(f.closeMilli,f.currency)}（${esc(p.quote.date)}）`:'暂缺收盘价')}</small></div><div class="row-side"><b class="num">${money(p.valueCents)}</b>${f.gain===null?'':gainLines(f)}</div>${sell}</li>`;
  },{label:'我的持仓',categories:[['HK','港股'],['US','美股']],category:p=>data.symbols.find(s=>s.symbol===p.symbol)?.market,time:false,order:false,empty:'还没有股票持仓'});
  return card('我的持仓','briefcase',rows);
 }
@@ -764,7 +768,7 @@ const rolledNote=o=>o.rolledFrom&&o.rolledFrom!==o.targetDate?`原定 ${esc(o.ro
 function ordersCard(){
  const session={preopen:'开盘前',intraday:'盘中',afterclose:'收盘后',closed:'休市'};
  const rows=recordsList('orders',data.orders,o=>{
-  const lines=[meta(`目标交易日 ${esc(o.targetDate)}`,o.side==='buy'?'预留 '+money(o.budgetCents):qtyText(o.qtyMicro)+' 股')];
+  const lines=[meta(`成交日 ${esc(o.targetDate)}`,o.side==='buy'?'预留 '+money(o.budgetCents):qtyText(o.qtyMicro)+' 股')];
   if(rolledNote(o))lines.push(rolledNote(o));
   if(o.status==='filled')lines.push(meta(`${esc(o.priceDate)} 收盘价 ${priceText(o.priceMilli)} 成交`,money(o.filledCents)));
   if(o.reason)lines.push(`<span class="neg">${esc(o.reason)}</span>`);
@@ -797,7 +801,7 @@ function wishes(){
 function history(){
  const categories=[['cash','存入零花钱'],['purchase','购买与退款'],['stock','股票买卖'],['task','任务奖励'],['fixed','定期存款'],['loan','借款与还款'],['other','其他']];
  const category=x=>{const group=String(x.type||'').split('.')[0];return group==='deposit'?'cash':categories.some(([key])=>key===group)?group:'other';};
- const rows=recordsList('ledger',data.ledger,l=>`<li class="row">${ledgerIcon(l.type)}<div class="row-main"><b>${esc(moneyInText(l.description))}</b><small>${dateTime(l.at)}</small></div><div class="row-side"><b class="num ${l.deltaCents>=0?'pos':'neg'}">${signedMoney(l.deltaCents)}</b><small class="num">余额 ${money(l.cashAfterCents)}</small></div></li>`,{label:'现金流水',categories,category,empty:'还没有交易记录'});
+ const rows=recordsList('ledger',data.ledger,l=>`<li class="row">${ledgerIcon(l.type)}<div class="row-main"><b>${esc(ledgerText(l))}</b><small>${dateTime(l.at)}</small></div><div class="row-side"><b class="num ${l.deltaCents>=0?'pos':'neg'}">${signedMoney(l.deltaCents)}</b><small class="num">余额 ${money(l.cashAfterCents)}</small></div></li>`,{label:'现金流水',categories,category,empty:'还没有交易记录'});
  return `${pageHead('交易记录','receipt')}${card('现金流水','list',rows)}`;
 }
 
@@ -964,7 +968,7 @@ async function selectForBuy(symbol){
  const buy=document.getElementById('buy');
  if(buy){buy.scrollIntoView?.({behavior:'smooth',block:'center'});buy.classList.add('flash');setTimeout(()=>buy.classList.remove('flash'),1200);}
 }
-const CONFIRM={'fixed.redeem':'提前赎回只退本金，没有利息。确定吗？','purchase.approve':'确认已经买好并交给 Olivia？将从她的活期扣款。','purchase.refund':'同意这次退款申请，并将全部购买金额退回 Olivia 的活期账户？','purchase.return.reject':'拒绝这次退款申请？每笔订单只能申请一次，拒绝后不能重新申请。','purchase.reject':'拒绝这个购买申请？','loan.reject':'拒绝这笔借款申请？','loan.payoff':'按今天的利息全部还清这笔借款？','wish.remove':'删除这个心愿？','order.roll':'仅在交易所临时休市时使用：把这笔订单顺延到下一交易日。确定吗？','order.cancel':'撤销这笔订单？只用于退市或长期停牌、一直没有收盘价的订单。买单预留的资金会退回 Olivia 的活期，她会收到通知。','task.completion.approve':'验收通过，把奖励存入 Olivia 的活期？','task.completion.reject':'这次任务验收不通过？','task.proposal.reject':'拒绝这个任务提议？','stock.cancel':'确定撤单吗？买单冻结的资金会退回。'};
+const CONFIRM={'fixed.redeem':'提前取出只拿回本金，没有利息。确定吗？','purchase.approve':'确认已经买好并交给 Olivia？将从她的活期扣款。','purchase.refund':'同意这次退款申请，并将全部购买金额退回 Olivia 的活期账户？','purchase.return.reject':'拒绝这次退款申请？每笔订单只能申请一次，拒绝后不能重新申请。','purchase.reject':'拒绝这个购买申请？','loan.reject':'拒绝这笔借款申请？','loan.payoff':'按今天的利息全部还清这笔借款？','wish.remove':'删除这个心愿？','order.roll':'仅在交易所临时休市时使用：把这笔订单顺延到下一交易日。确定吗？','order.cancel':'撤销这笔订单？只用于退市或长期停牌、一直没有收盘价的订单。买单预留的资金会退回 Olivia 的活期，她会收到通知。','task.completion.approve':'验收通过，把奖励存入 Olivia 的活期？','task.completion.reject':'这次任务验收不通过？','task.proposal.reject':'拒绝这个任务提议？','stock.cancel':'确定撤单吗？买单冻结的资金会退回。'};
 const SUBMIT_CONFIRM={'loan.repay':'确定还款吗？','purchase.return.request':'每笔订单只能申请一次退款，提交后不能撤回。确定提交？'};
 
 root.addEventListener('click',async e=>{

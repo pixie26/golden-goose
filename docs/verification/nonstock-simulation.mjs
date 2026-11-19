@@ -9,6 +9,17 @@ for(let seed=1;seed<=12;seed++){
  let s=initialState();s.dadHash='audit';s.kidHash='audit';let serial=0;
  const act=(role,action,payload={})=>{let draft=structuredClone(s);const k=`nonstock-audit-${seed}-${++serial}`;try{runAction(draft,role,action,payload,k);s=draft;executed++;return true;}catch(e){expectedRejects++;return false;}};
  const amount=()=>((Math.floor(rand()*50000)+1)/100).toFixed(2);
+ // Loans are borrowed and repaid in O$0.1 units; one in five tries a cent amount, which must be refused.
+ const loanAmount=()=>rand()<0.2?amount():((Math.floor(rand()*5000)+1)/10).toFixed(1);
+ const dueOf=id=>{const v=view(s,'kid').loans.find(x=>x.id===id);return v.principalCents+Math.round(v.interestMicroCents/1e6);};
+ const repay=(l,payload)=>{
+  const due=dueOf(l.id),cash=s.cashCents,ok=act('kid','loan.repay',{id:l.id,...payload}),after=s.loans.find(x=>x.id===l.id),paid=cash-s.cashCents;
+  if(payload.amount&&!/^\d+(\.\d0?)?$/.test(payload.amount))assert.equal(ok,false,'cent repayments are refused');
+  if(!ok)return assert.equal(paid,0);
+  assert(paid>0&&paid<=due,'never charged more than the due');assert.equal(after.waivedCents,undefined,'nothing is ever waived');
+  if(after.status==='repaid')assert.equal(paid,due,'a loan closes only when its exact due is paid');
+  else assert.equal(dueOf(l.id),due-paid,'the debt falls by exactly the amount paid');
+ };
  act('dad','cash.grant',{amount:'1000'});
  for(let step=0;step<800;step++){
   let r,l,f;
@@ -20,10 +31,10 @@ for(let seed=1;seed<=12;seed++){
    case 4: r=pick(s.purchaseRequests.filter(r=>r.status==='return_pending'));if(r)act('dad',rand()<0.7?'purchase.refund':'purchase.return.reject',{id:r.id});break;
    case 5: act('kid','fixed.open',{term:pick([3,6,12]),amount:amount()});break;
    case 6: f=pick(s.fixed.filter(f=>f.status==='active'));if(f)act('kid','fixed.redeem',{id:f.id});break;
-   case 7: act('kid','loan.request',{amount:amount()});break;
+   case 7: {const v=loanAmount(),n=s.loans.length,ok=act('kid','loan.request',{amount:v});if(!/^\d+(\.\d0?)?$/.test(v))assert(!ok&&s.loans.length===n,'cent loan requests are refused');break;}
    case 8: l=pick(s.loans.filter(l=>l.status==='pending'));if(l)act('dad',rand()<.8?'loan.approve':'loan.reject',{id:l.id});break;
-   case 9: l=pick(s.loans.filter(l=>l.status==='active'));if(l)act('kid','loan.repay',{id:l.id,all:true});break;
-   case 10: l=pick(s.loans.filter(l=>l.status==='active'));if(l)act('kid','loan.repay',{id:l.id,amount:amount()});break;
+   case 9: l=pick(s.loans.filter(l=>l.status==='active'));if(l)repay(l,{all:true});break;
+   case 10: l=pick(s.loans.filter(l=>l.status==='active'));if(l)repay(l,{amount:loanAmount()});break;
    case 11: act('dad','settings.update',{loanLimit:pick(['0','500','800']),loanAPR:pick(['0','5','25','100']),rate3:pick(['0','5','100'])});break;
    case 12: clock+=Math.floor(rand()*15*86400000);maintenance(s);break;
    case 13: act('dad','task.create',{name:'fold shirt',unit:'件',amount:(Math.floor(rand()*30+1)/10).toFixed(1)});act('kid','task.complete',{id:s.tasks[0].id,quantity:Math.floor(rand()*10)+1});act('dad','task.completion.approve',{id:s.taskCompletions[0].id});break;

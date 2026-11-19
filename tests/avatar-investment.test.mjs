@@ -46,8 +46,8 @@ test('rejects SVG, malformed JPEG, nonsquare images, overlarge data and preserve
 test('home page code renders stock mark-to-market, P&L, holding count and trade-date labels',()=>{
  const app=readFileSync(new URL('../public/app.js',import.meta.url),'utf8');
  assert.match(app,/investmentSnapshot\(\)/);
- assert.match(app,/股票总市值/);
- assert.match(app,/未实现盈亏/);
+ assert.match(app,/股票市值/);
+ assert.match(app,/目前盈亏/);
  assert.match(app,/持仓数量/);
  assert.match(app,/收盘价日期/);
  assert.match(app,/kid-avatar-file/);

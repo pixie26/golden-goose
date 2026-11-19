@@ -40,7 +40,7 @@ test('home holdings show buy price, close, gain and gain %',async()=>{
  assert.match(us,/<span class="num neg">−O\$ 40\.0<\/span><span class="num neg">−4\.3%<\/span>/);
  const missing=holding(html,'9988.HK');
  assert.match(missing,/买入价 <b class="num">85\.0 HKD<\/b> · 收盘价 <b class="num">—<\/b>/);
- assert.match(missing,/暂缺收盘价 · 按成本估值/);assert.match(missing,/<span class="muted">—<\/span>/);
+ assert.match(missing,/还没有收盘价 · 先按买入金额计算/);assert.match(missing,/<span class="muted">—<\/span>/);
 });
 
 test('stock page holdings show the same figures',async()=>{

@@ -31,7 +31,7 @@ test('fixed deposit cap uses spendable cash after shopping and stock reservation
  assert.match(html,/data-op="fixed\.open" novalidate/);
  assert.match(html,/name="amount"[^>]*max="10\.00" data-budget-amount/);
  assert.match(html,/本次最多<\/span><b class="num">O\$ 10\.0<\/b>/);
- assert.match(html,/已扣除待处理购物和股票买单的预留金额/);
+ assert.doesNotMatch(html,/已扣除待处理/,'the account summary above the form already explains holds');
  assert.equal(s.cashCents,10000);
  assert.equal(view(s,'kid').summary.availableCents,1000);
 
