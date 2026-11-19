@@ -22,7 +22,7 @@ test('actual home HTML shows investment summary, exact holdings, quote dates and
  assert.match(html,/我的投资速览/);
  assert.match(html,/股票市值/);
  assert.match(html,/O\$ 1,400\.0(?![\d.])/,'AAPL marked at O$1200, HK shares without quote at cost O$200');
- assert.match(html,/目前盈亏/);
+ assert.match(html,/未实现盈亏/);
  assert.match(html,/\+O\$ 200\.0(?![\d.])/,'only AAPL has a valid unrealized gain');
  assert.match(html,/收盘价日期 2026-11-16/);
  assert.match(html,/1 只股票还没有收盘价/);

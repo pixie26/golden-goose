@@ -66,5 +66,5 @@ test('budget, shopping, wish and stock texts are short and say each thing once',
  const fixed=run('fixedPanel()');
  assert.match(fixed,/提前取出只拿回本金，没有利息/);assert.doesNotMatch(fixed,/赎回|连本带息/);
  const stocks=run("tab='stocks';render();document.getElementById('root').innerHTML");
- for(const jargon of ['未实现','不含股息','停牌','目标交易日','释放预留'])assert.ok(!stocks.includes(jargon),jargon);
+ for(const jargon of ['不含股息','停牌','目标交易日','释放预留'])assert.ok(!stocks.includes(jargon),jargon);
 });

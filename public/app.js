@@ -619,7 +619,7 @@ function investmentSnapshot(){
  const missing=holdings.filter(p=>!p.quote).length;
  const pending=data.orders.filter(o=>o.status==='pending').length;
  const name=p=>data.symbols.find(s=>s.symbol===p.symbol)?.name||p.symbol;
- const stats=`<div class="mini-stats"><div><span>股票市值</span><b class="num">${money(data.summary.stocksValueCents)}</b></div><div><span>目前盈亏</span><b class="num ${pnl>=0?'pos':'neg'}">${signedMoney(pnl)}</b></div><div><span>持仓数量</span><b class="num">${holdings.length} 只</b></div><div><span>待成交</span><b class="num">${pending} 笔</b></div></div>`;
+ const stats=`<div class="mini-stats"><div><span>股票市值</span><b class="num">${money(data.summary.stocksValueCents)}</b></div><div><span>未实现盈亏</span><b class="num ${pnl>=0?'pos':'neg'}">${signedMoney(pnl)}</b></div><div><span>持仓数量</span><b class="num">${holdings.length} 只</b></div><div><span>待成交</span><b class="num">${pending} 笔</b></div></div>`;
  const rows=holdings.length?`<div class="holdings">${holdings.slice(0,3).map(p=>{const f=positionFigures(p);return `<div class="holding"><div class="holding-main"><b>${esc(p.symbol)}</b><span>${esc(name(p))}</span><small class="holding-prices">买入价 <b class="num">${priceWithCurrency(f.buyMilli,f.currency)}</b> · 收盘价 <b class="num">${priceWithCurrency(f.closeMilli,f.currency)}</b></small><small>${p.quote?`收盘价日期 ${esc(p.quote.date)}`:'还没有收盘价 · 先按买入金额计算'}</small></div><div class="holding-side"><b class="num">${money(p.valueCents)}</b>${gainLines(f)}</div></div>`;}).join('')}</div>`:'<p class="hint invest-empty">还没有股票持仓</p>';
  const warn=missing?`<p class="hint warn-text">${missing} 只股票还没有收盘价，先按买入金额计算，不算盈亏。</p>`:'';
  return card('我的投资速览','trend',stats+rows+warn,{right:more('stocks','查看投资'),cls:'invest'});
@@ -713,7 +713,7 @@ function stocks(){
  const pnl=holdings.reduce((n,p)=>n+(p.quote?p.valueCents-p.costCents:0),0);
  const pending=data.orders.filter(o=>o.status==='pending').length;
  return `${pageHead('投资','trend')}
- <div class="stats">${stat('股票市值',money(data.summary.stocksValueCents))}${stat('目前盈亏',signedMoney(pnl),pnl>=0?'pos':'neg')}${stat('持仓',holdings.length+' 只')}${stat('待成交',pending+' 笔')}</div>
+ <div class="stats">${stat('股票市值',money(data.summary.stocksValueCents))}${stat('未实现盈亏',signedMoney(pnl),pnl>=0?'pos':'neg')}${stat('持仓',holdings.length+' 只')}${stat('待成交',pending+' 笔')}</div>
  <div class="cols cols-main"><div class="stack">${searchCard()}${watchCard()}</div><div class="stack">${buyCard(tradable)}</div></div>
  <div class="cols even">${holdingsCard(holdings)}${ordersCard()}</div>`;
 }
