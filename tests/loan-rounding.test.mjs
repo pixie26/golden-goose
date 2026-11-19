@@ -50,44 +50,12 @@ test('paying less never waives the remainder: it stays owed and the next O$0.1 c
  assert.equal(l.status,'repaid');assert.equal(s.cashCents,cash-10347,'exactly the due in total: nothing waived, nothing extra');
 });
 
-test('"全部还清" with enough cash pays the exact due',()=>{
+test('"全部还清" pays the exact due and still requires the whole amount',()=>{
+ const short=borrowed('3.42'),before=JSON.stringify(short.s);// cash O$103.42; due O$103.47
+ assert.throws(()=>act(short.s,'loan.repay',{id:short.l.id,all:true}),/可用余额不足/);
+ assert.equal(JSON.stringify(short.s),before);
  const {s,l,cash}=borrowed();act(s,'loan.repay',{id:l.id,all:true});
- assert.equal(l.status,'repaid');assert.equal(s.cashCents,cash-10347);assert.equal(l.waivedCents,undefined);
-});
-
-test('all free cash short of the due by under O$0.1 clears the loan, by "全部还清" or by typing the shown due',()=>{
- for(const payload of [{all:true},{amount:'103.5'}]){
-  const {s,l}=borrowed('3.42');// cash O$103.42, nothing held; due O$103.47
-  act(s,'loan.repay',{id:l.id,...payload});
-  assert.equal(l.status,'repaid');assert.equal(l.principalCents,0);assert.equal(l.waivedCents,5);
-  assert.equal(s.cashCents,0,'every free cent is used');assert.equal(s.ledger[0].deltaCents,-10342);
-  assert.match(s.ledger[0].description,/差额不足 O\$ 0\.1 免还/);
-  assert.match(s.audit.find(x=>x.type==='loan.waive').summary,/差额 5 分免还/);
- }
-});
-
-test('a shortfall of O$0.1 or more still needs cash',()=>{
- const {s,l}=borrowed('3.37'),before=JSON.stringify(s);// cash O$103.37; due O$103.47
- assert.throws(()=>act(s,'loan.repay',{id:l.id,all:true}),/可用余额不足/);
- assert.throws(()=>act(s,'loan.repay',{id:l.id,amount:'103.5'}),/可用余额不足/);
- assert.equal(JSON.stringify(s),before);
-});
-
-test('no shortfall settlement while any cash is held, so a hold cannot be used to shave the debt',()=>{
- const {s,l}=borrowed('13.42');// cash O$113.42
- act(s,'purchase.request',{name:'书',amount:'10'});// O$10 held: O$103.42 free, due O$103.47
- const before=JSON.stringify(s);
- assert.throws(()=>act(s,'loan.repay',{id:l.id,all:true}),/可用余额不足/);
- assert.throws(()=>act(s,'loan.repay',{id:l.id,amount:'103.5'}),/可用余额不足/);
- assert.equal(JSON.stringify(s),before);
-});
-
-test('paying part of the due is never waived, even when it leaves less than O$0.1',()=>{
- const {s,l}=borrowed('3.42');
- act(s,'loan.repay',{id:l.id,amount:'103.4'});// O$0.02 left in cash, O$0.07 owed
- assert.equal(l.status,'active');assert.equal(l.principalCents,7);assert.equal(l.waivedCents,undefined);
- act(s,'loan.repay',{id:l.id,amount:'0.1'});// the shown due again: all free cash, short by O$0.05
- assert.equal(l.status,'repaid');assert.equal(l.waivedCents,5);assert.equal(s.cashCents,0);
+ assert.equal(l.status,'repaid');assert.equal(s.cashCents,cash-10347);
 });
 
 test('a legacy remainder under O$0.1 needs cash and is cleared by one O$0.1 repayment',()=>{
@@ -128,15 +96,6 @@ test('loan rows show the due rounded up, and the repay field takes that amount i
   assert.match(html,new RegExp(`name="amount"[^>]*min="0\\.1" step="0\\.1" max="${shown}0"`));
   assert.match(run('assetsCard()'),new RegExp(`欠家长</span><b class="num neg">−O\\$ ${shown}</b>`));
  }
-});
-
-test('the loan row explains the shortfall settlement only when it applies',async()=>{
- const hint=/用掉全部可用余额并结清/;
- assert.match((await mount(borrowed('3.42').s))('loanPanel()'),hint);
- assert.doesNotMatch((await mount(borrowed('3.37').s))('loanPanel()'),hint,'short by O$0.1 or more');
- assert.doesNotMatch((await mount(borrowed().s))('loanPanel()'),hint,'enough cash');
- const held=borrowed('13.42').s;act(held,'purchase.request',{name:'书',amount:'10'});
- assert.doesNotMatch((await mount(held))('loanPanel()'),hint,'cash on hold');
 });
 
 test('the loan request field uses O$0.1 steps and hides when less than O$0.1 can be borrowed',async()=>{

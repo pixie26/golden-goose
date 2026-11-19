@@ -684,9 +684,7 @@ function loanPanel(){
  const rows=recordsList('loans',data.loans,l=>{
   const interest=Math.round(l.interestMicroCents/1e6),due=l.principalCents+interest,active=l.status==='active';
   const info=active?meta(`本金 ${money(l.principalCents)}`,`利息 ${money(interest)}`,`年息 ${pct(l.aprBps)}`):meta(date(l.createdAt),`年息 ${pct(l.aprBps)}`);
-  // Mirrors loan.repay: all free cash, no pending holds, short of the due by under O$0.1.
-  const free=data.summary.availableCents,settleAll=active&&due>free&&free>0&&!data.summary.reservedCents&&due-free<10;
-  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.1" step="0.1" max="${(owedCents(due)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>${settleAll?'<p class="hint loan-settle">可用余额比应还少不到 O$ 0.1：按应还金额还款或点「全部还清」，会用掉全部可用余额并结清，差额免还。</p>':''}`:'';
+  const repay=active?`<div class="row-actions repay">${opForm('loan.repay',`${hiddenInput('id',l.id)}<label class="field"><span>还款 O$</span><input name="amount" type="number" inputmode="decimal" required min="0.1" step="0.1" max="${(owedCents(due)/100).toFixed(2)}" placeholder="0.0"></label>`,'还款',{cls:'form-inline'})}${btn('loan.payoff','全部还清',l.id,'soft')}</div>`:'';
   return `<li class="row"><div class="row-main"><b>借款 <span class="num">${money(l.requestedCents)}</span></b><small>${info}</small></div><div class="row-side">${active?`<b class="num neg">${money(owedCents(due))}</b>`:''}${statusBadge('loan',l.status)}</div>${repay}</li>`;
  },{label:'我的借款',categories:recordStatusCategories('loan'),empty:'暂无借款'});
  const request=role!=='kid'?'<p class="hint">Olivia 可以登录自己的账户申请借款。</p>':spendableCents(available)>0?opForm('loan.request',field('amount','借多少 O$','number',`inputmode="decimal" required min="0.1" step="0.1" max="${(spendableCents(available)/100).toFixed(2)}" placeholder="0.0"`),'申请借钱'):`<p class="loan-limit-message">${limit===0?'家长已暂停新增借款。':'当前没有可申请的额度，还款或待处理申请被拒绝后会释放额度。'}</p>`;
